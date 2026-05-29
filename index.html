@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prode Mundial 2026 - Ultimate Edition</title>
+    <style>
+        :root {
+            --bg-dark: #0f172a; --bg-card: #1e293b; --text-main: #f8fafc; --text-muted: #94a3b8; 
+            --accent: #38bdf8; --accent-hover: #7dd3fc; --gold: #eab308; --danger: #ef4444; --success: #22c55e; 
+            --purple: #a855f7; --border: #334155; --var-color: #2563eb; --walicho: #c026d3;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+        body { background-color: var(--bg-dark); color: var(--text-main); display: flex; justify-content: center; min-height: 100vh; transition: background-color 0.5s ease; }
+        body.modo-madrugada { background-color: #020617; } 
+        
+        .app-container { width: 100%; max-width: 600px; display: flex; flex-direction: column; background-color: transparent; min-height: 100vh; position: relative;}
+
+        /* PORTADA */
+        .cover-container { width: 100%; height: 200px; overflow: hidden; background-color: var(--bg-card); border-bottom: 2px solid var(--accent); cursor: pointer; user-select: none; }
+        .cover-img { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; display: block; }
+
+        /* PANTALLAS */
+        .screen { display: none; flex-direction: column; flex-grow: 1; }
+        .screen.active { display: flex; }
+
+        /* LOBBY AVATARES */
+        .lobby-container { padding: 30px 20px; text-align: center; background: var(--bg-dark); flex-grow:1; }
+        .lobby-title { color: var(--gold); font-size: 1.8rem; text-transform: uppercase; margin-bottom: 5px; }
+        .lobby-subtitle { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 30px; }
+        .form-group { margin-bottom: 25px; text-align: left; }
+        .form-group label { display: block; margin-bottom: 8px; color: var(--accent); font-weight: bold; }
+        .form-group select { width: 100%; padding: 12px; background-color: var(--bg-card); color: white; border: 1px solid var(--border); border-radius: 8px; font-size: 1rem; outline: none; }
+        .pieces-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px; }
+        .piece-option { background-color: var(--bg-card); border: 2px solid var(--border); border-radius: 10px; padding: 15px 5px; cursor: pointer; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+        .piece-option:hover { border-color: var(--accent-hover); }
+        .piece-option.selected { border-color: var(--gold); background-color: rgba(234, 179, 8, 0.1); }
+        .piece-option img, .piece-option .emoji-placeholder { width: 40px; height: 40px; object-fit: contain; margin-bottom: 5px; display: flex; align-items: center; justify-content: center; font-size: 30px; }
+        .piece-option span { font-size: 0.75rem; color: var(--text-muted); font-weight: 600; }
+        
+        /* AVATAR COMPUESTO CORREGIDO */
+        .avatar-preview-box { background-color: #0d121f; border: 1px dashed var(--border); border-radius: 12px; padding: 15px; margin-top: 20px; display: flex; flex-direction: column; align-items: center; }
+        .composite-avatar { position: relative; width: 100px; height: 100px; margin: 0 auto; }
+        .composite-head { position: absolute; bottom: 35px; left: 50%; transform: translateX(-50%); width: 60px; height: 60px; object-fit: contain; z-index: 2; transition: all 0.3s ease; }
+        .composite-piece { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 70px; height: 70px; object-fit: contain; z-index: 1; transition: all 0.3s ease; }
+
+        /* HEADER APP */
+        header { background-color: var(--bg-card); padding: 15px 20px 0 20px; text-align: center; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
+        .user-profile-header { display: flex; align-items: center; justify-content: flex-start; gap: 15px; margin-bottom: 15px; background: rgba(0,0,0,0.2); padding: 10px 15px; border-radius: 12px; }
+        .mini-avatar { position: relative; width: 50px; height: 50px; }
+        .mini-head { position: absolute; bottom: 18px; left: 50%; transform: translateX(-50%); width: 30px; height: 30px; object-fit: contain; z-index: 2; }
+        .mini-piece { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 35px; height: 35px; object-fit: contain; z-index: 1; }
+        .user-name-display { font-size: 1.2rem; font-weight: bold; color: var(--gold); }
+        .btn-logout { background: transparent; border: 1px solid var(--danger); color: var(--danger); padding: 6px 12px; border-radius: 6px; font-size: 0.75rem; cursor: pointer; margin-left: auto; transition: all 0.2s; font-weight: bold; }
+        .btn-logout:hover { background: rgba(239, 68, 68, 0.1); }
+        
+        .nav-tabs { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 5px; margin-top: 10px; }
+        .nav-tabs::-webkit-scrollbar { height: 4px; }
+        .nav-tabs::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+        .tab-btn { background: transparent; color: var(--text-muted); border: none; padding: 8px 12px; font-size: 0.9rem; font-weight: 600; cursor: pointer; white-space: nowrap; border-bottom: 2px solid transparent; transition: all 0.2s; }
+        .tab-btn.active { color: var(--accent); border-bottom: 2px solid var(--accent); }
+
+        /* MAIN APP */
+        main { padding: 20px; flex-grow: 1; overflow-y: auto; background: var(--bg-dark);}
+        .filter-group { display: flex; gap: 10px; margin-bottom: 20px; }
+        .filter-group select { flex: 1; padding: 12px; background-color: var(--accent); color: var(--bg-dark); font-weight:bold; border: none; border-radius: 8px; font-size: 1rem; outline: none; }
+        
+        .match-card { background-color: var(--bg-card); border-radius: 12px; padding: 20px; margin-bottom: 15px; border: 1px solid var(--border); position: relative; overflow: hidden; }
+        .match-header { display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+        .match-body { display: flex; align-items: center; justify-content: space-between; }
+        .team { flex: 1; display: flex; flex-direction: column; gap: 5px; font-weight: 600; font-size: 0.95rem; }
+        .team.local { align-items: flex-end; text-align: right; }
+        .team.away { align-items: flex-start; text-align: left; }
+        .flag { font-size: 1.8rem; line-height: 1; }
+        .score-container { display: flex; align-items: center; gap: 10px; margin: 0 15px; }
+        .score-input { width: 45px; height: 45px; text-align: center; font-size: 1.2rem; font-weight: bold; background-color: var(--bg-dark); color: var(--text-main); border: 1px solid var(--border); border-radius: 8px; outline: none; transition: background-color 0.2s; }
+        .score-input:focus { border-color: var(--accent); }
+        
+        /* BOTONES HABILIDADES */
+        .critical-zone { margin-top: 15px; padding-top: 12px; border-top: 1px dashed var(--border); display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+        .skill-btn { display: flex; align-items: center; gap: 5px; cursor: pointer; font-size: 0.8rem; padding: 8px 12px; border-radius: 20px; font-weight: bold; transition: all 0.2s; border: 1px solid transparent; }
+        .btn-dados { color: var(--purple); background: rgba(168, 85, 247, 0.1); border-color: rgba(168, 85, 247, 0.3); }
+        .btn-var { color: var(--var-color); background: rgba(37, 99, 235, 0.1); border-color: rgba(37, 99, 235, 0.3); }
+        .btn-var.agotado { opacity: 0.5; cursor: not-allowed; filter: grayscale(1); }
+
+        .btn-primary { width: 100%; background-color: var(--accent); color: var(--bg-dark); border: none; padding: 15px; border-radius: 8px; font-size: 1rem; font-weight: bold; cursor: pointer; margin-top: 20px; margin-bottom: 30px; text-transform: uppercase; transition: background 0.2s;}
+        .btn-primary:hover { background-color: var(--accent-hover); }
+        
+        #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background-color: var(--success); color: white; padding: 12px 24px; border-radius: 30px; font-weight: bold; font-size: 0.9rem; opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 1000; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.5);}
+        #toast.show { opacity: 1; bottom: 30px; }
+
+        /* BOTÓN FLOTANTE WALICHO */
+        .fab-walicho { position: fixed; bottom: 30px; right: 20px; width: 60px; height: 60px; background: linear-gradient(135deg, #d946ef, #9333ea); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 15px rgba(192, 38, 211, 0.5); cursor: pointer; z-index: 100; transition: transform 0.2s; border: 2px solid #fdf4ff;}
+        .fab-walicho:hover { transform: scale(1.1) rotate(10deg); }
+        .fab-walicho.usado { filter: grayscale(1); opacity: 0.5; cursor: not-allowed; }
+
+        /* TABLA POSICIONES */
+        .leaderboard { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        .leaderboard th, .leaderboard td { padding: 12px; text-align: center; border-bottom: 1px solid var(--border); }
+        .leaderboard th { color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; }
+        .leaderboard td { font-size: 0.95rem; }
+        .pos-1 { color: var(--gold); font-weight: bold; }
+        .leaderboard-row { transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.15s; cursor: default; }
+        .leaderboard-row.hover-effect:hover { transform: scale(1.04); background-color: rgba(56, 189, 248, 0.08); border-radius: 8px; z-index: 10; position: relative; }
+        .leaderboard-user { display: flex; align-items: center; justify-content: flex-start; gap: 12px; }
+        .leaderboard-avatar { position: relative; width: 40px; height: 45px; flex-shrink: 0; }
+        .leaderboard-head { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); width: 25px; height: 25px; object-fit: contain; z-index: 2; pointer-events: none;}
+        .leaderboard-piece { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 30px; height: 30px; object-fit: contain; z-index: 1; pointer-events: none;}
+
+        /* REGLAS Y PANEL DEV */
+        .rules-list { list-style: none; color: var(--text-muted); line-height: 1.6; }
+        .rules-list li { margin-bottom: 15px; background: var(--bg-dark); padding: 12px; border-radius: 8px; border-left: 4px solid var(--accent); }
+        .rules-list strong { color: white; display: block; margin-bottom: 4px; }
+        
+        .dev-panel { background: rgba(0,0,0,0.3); border: 1px dashed var(--danger); padding: 15px; border-radius: 8px; margin-top: 30px; font-size: 0.8rem; }
+        .dev-panel h4 { color: var(--danger); margin-bottom: 10px; text-transform: uppercase;}
+        .dev-btn { background: #334155; color: white; border: none; padding: 8px 12px; margin: 3px; border-radius: 6px; cursor: pointer; transition: 0.2s;}
+        .dev-btn:hover { background: #475569; }
+
+        /* 9-12 ANIMATION */
+        .river-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: repeating-linear-gradient(45deg, #fff, #fff 40px, #ef4444 40px, #ef4444 80px); opacity: 0; pointer-events: none; z-index: 9999; transition: opacity 0.5s; display: flex; align-items:center; justify-content:center;}
+        .river-overlay h1 { background: black; color: white; padding: 20px; border-radius: 10px; font-size: 3rem; text-align:center; transform: scale(0.5); transition: transform 0.5s; box-shadow: 0 10px 30px rgba(0,0,0,0.5);}
+        .river-overlay.show { opacity: 0.9; }
+        .river-overlay.show h1 { transform: scale(1); }
+    </style>
+</head>
+<body>
+
+<audio id="audio-main_theme_1" src="main_theme_1.mp3" preload="auto"></audio>
+<audio id="audio-main_theme_2" src="main_theme_2.mp3" preload="auto"></audio>
+<audio id="audio-main_theme_3" src="main_theme_3.mp3" preload="auto"></audio>
+<audio id="audio-argentina" src="argentina.mp3" preload="auto"></audio>
+<audio id="audio-mexico" src="mexico.mp3" preload="auto"></audio>
+<audio id="audio-brasil" src="magalenha.mp3" preload="auto"></audio>
+<audio id="audio-francia" src="francia.mp3" preload="auto"></audio>
+<audio id="audio-usa" src="usa.mp3" preload="auto"></audio>
+<audio id="audio-espana" src="espana.mp3" preload="auto"></audio>
+<audio id="audio-alemania" src="alemania.mp3" preload="auto"></audio>
+<audio id="audio-colombia" src="colombia.mp3" preload="auto"></audio>
+<audio id="audio-holanda" src="holanda.mp3" preload="auto"></audio>
+<audio id="audio-uruguay" src="uruguay.ogg" preload="auto"></audio>
+<audio id="audio-rock" src="rock.mp3" preload="auto"></audio>
+<audio id="audio-912" src="912.mp3" preload="auto"></audio>
+<audio id="audio-estas_seguro" src="estas_seguro.ogg" preload="auto"></audio>
+<audio id="audio-trampa" src="trampa.mp3" preload="auto"></audio>
+
+
+<div class="river-overlay" id="river-anim">
+    <h1>🏆 LA GLORIA ETERNA 🏆<br><span style="font-size:1rem; font-weight:normal;">(+0 Pts, pero mis respetos)</span></h1>
+</div>
+
+<div class="app-container">
+    <div class="cover-container" onclick="handleCoverClick()">
+        <img src="caricatura_amigos.png" alt="Los Pibes del Prode" class="cover-img" onerror="this.style.display='none'">
+    </div>
+
+    <div id="screen-login" class="screen active">
+        <div class="lobby-container">
+            <h1 class="lobby-title">Creá tu Avatar</h1>
+            <p class="lobby-subtitle">Elegí tu jugador y tu pieza para entrar al tablero</p>
+
+            <div class="form-group">
+                <label>1. ¿Quién sos?</label>
+                <select id="select-name" onchange="updateHeadPreview()">
+                    <option value="" disabled selected>Seleccioná tu nombre...</option>
+                    <option value="Emma">Emma</option>
+                    <option value="Tomi">Tomi</option>
+                    <option value="Facu">Facu</option>
+                    <option value="Rodri">Rodri</option>
+                    <option value="Mono">Mono</option>
+                    <option value="Tano">Tano</option>
+                    <option value="Maxi">Maxi</option>
+                    <option value="FAK">FAK</option>
+                    <option value="Blangi">Blangi</option>
+                    <option value="Kiki">Kiki</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>2. Elegí tu Ficha Base</label>
+                <div class="pieces-grid">
+                    <div class="piece-option selected" onclick="selectPiece('pieza_auto.png', this)">
+                        <img src="pieza_auto.png" alt="Auto" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="emoji-placeholder" style="display:none;">🚗</div>
+                        <span>El Auto</span>
+                    </div>
+                    <div class="piece-option" onclick="selectPiece('pieza_perro.png', this)">
+                        <img src="pieza_perro.png" alt="Perro" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="emoji-placeholder" style="display:none;">🐕</div>
+                        <span>El Perro</span>
+                    </div>
+                    <div class="piece-option" onclick="selectPiece('pieza_sombrero.png', this)">
+                        <img src="pieza_sombrero.png" alt="Sombrero" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="emoji-placeholder" style="display:none;">🎩</div>
+                        <span>La Galera</span>
+                    </div>
+                    <div class="piece-option" onclick="selectPiece('pieza_banana.png', this)">
+                        <img src="pieza_banana.png" alt="Banana" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="emoji-placeholder" style="display:none;">🍌</div>
+                        <span>La Banana</span>    
+                    </div>
+                    <div class="piece-option" onclick="selectPiece('pieza_pelota_futbol.png', this)">
+                        <img src="pieza_pelota_futbol.png" alt="Pelota de Fútbol" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="emoji-placeholder" style="display:none;">⚽</div>
+                        <span>La Pelota de Fútbol</span>    
+                    </div>
+                    <div class="piece-option" onclick="selectPiece('pieza_hormiga.png', this)">
+                        <img src="pieza_hormiga.png" alt="Hormiga" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="emoji-placeholder" style="display:none;">🐜</div>
+                        <span>La Hormiga</span>    
+                    </div>
+                    <div class="piece-option" onclick="selectPiece('pieza_maletin.png', this)">
+                        <img src="pieza_maletin.png" alt="Maletín" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="emoji-placeholder" style="display:none;">💼</div>
+                        <span>El Maletín</span>    
+                    </div>
+                    <div class="piece-option" onclick="selectPiece('pieza_mono.png', this)">
+                        <img src="pieza_mono.png" alt="Mono" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="emoji-placeholder" style="display:none;">🐵</div>
+                        <span>El Mono</span>    
+                    </div>
+                    <div class="piece-option" onclick="selectPiece('pieza_joystick.png', this)">
+                        <img src="pieza_joystick.png" alt="Joystick" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="emoji-placeholder" style="display:none;">🎮</div>
+                        <span>El Joystick</span>    
+                    </div>
+                    <div class="piece-option" onclick="selectPiece('pieza_tornillo.png', this)">
+                        <img src="pieza_tornillo.png" alt="Tornillo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="emoji-placeholder" style="display:none;">🔧</div>
+                        <span>El Tornillo</span>    
+                    </div>
+                    <div class="piece-option" onclick="selectPiece('pieza_mancuerna.png', this)">
+                        <img src="pieza_mancuerna.png" alt="Mancuerna" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="emoji-placeholder" style="display:none;">💪</div>
+                        <span>La Mancuerna</span>    
+                    </div>
+                    <div class="piece-option" onclick="selectPiece('pieza_galleta.png', this)">
+                        <img src="pieza_galleta.png" alt="Galleta" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="emoji-placeholder" style="display:none;">🍪</div>
+                        <span>La Galleta</span>    
+                    </div>
+                    <div class="piece-option" onclick="selectPiece('pieza_heladera.png', this)">
+                        <img src="pieza_heladera.png" alt="Heladera" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="emoji-placeholder" style="display:none;">🧊</div>
+                        <span>La Heladera</span>    
+                    </div>
+                    <div class="piece-option" onclick="selectPiece('pieza_mate.png', this)">
+                        <img src="pieza_mate.png" alt="Mate" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="emoji-placeholder" style="display:none;">☕</div>
+                        <span>El Mate</span>    
+                    </div>
+                    <div class="piece-option" onclick="selectPiece('pieza_jirafa.png', this)">
+                        <img src="pieza_jirafa.png" alt="Jirafa" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="emoji-placeholder" style="display:none;">🦒</div>
+                        <span>La Jirafa</span>    
+                    </div>
+                </div>
+            </div>
+
+            <div class="avatar-preview-box">
+                <p style="color:var(--text-muted); font-size:0.8rem; margin-bottom:10px;">Tu Ficha Final</p>
+                <div class="composite-avatar">
+                    <img id="preview-head" class="composite-head" src="" alt="Cabeza" style="display:none;">
+                    <img id="preview-piece" class="composite-piece" src="pieza_auto.png" alt="Pieza" style="display:none;">
+                </div>
+            </div>
+
+            <button class="btn-primary" style="margin-top: 30px;" onclick="registerAndEnter()">Entrar al Tablero</button>
+        </div>
+    </div>
+
+    <div id="screen-app" class="screen">
+        <header>
+            <div class="user-profile-header">
+                <div class="mini-avatar">
+                    <img id="header-head" class="mini-head" src="" alt="Cabeza" onerror="this.style.display='none'">
+                    <img id="header-piece" class="mini-piece" src="" alt="Pieza" onerror="this.style.display='none'">
+                </div>
+                <div class="user-name-display" id="header-name">Usuario</div>
+                <button class="btn-logout" onclick="logout()">Salir</button>
+            </div>
+
+            <div class="nav-tabs">
+                <button class="tab-btn active" onclick="switchTab('grupos', this)">Partidos</button>
+                <button class="tab-btn" onclick="switchTab('posiciones', this)">Posiciones</button>
+                <button class="tab-btn" onclick="switchTab('reglas', this)">Reglas</button>
+            </div>
+        </header>
+
+        <main id="app-content"></main>
+
+        <div class="fab-walicho" id="btn-walicho" onclick="abrirMenuWalicho()" title="Tirar un Walicho">🍄</div>
+    </div>
+</div>
+
+<div id="toast">✅ Acción completada</div>
+
+<script>
+    // ==========================================
+    // CONFIGURACIÓN PRINCIPAL Y BASE DE DATOS
+    // ==========================================
+    
+    // PEGÁ ACÁ LA URL DE TU APPS SCRIPT
+    const API_URL = "https://script.google.com/macros/s/AKfycbyhFpd3I1saC8GYW7ebl_c5xHaGMTPONn8b2y_kNEr1rA9MV8YflQkvgAv_1LfIrCA/exec";
+
+    const headsDatabase = {
+        "Emma": "caricatura_emma.png",
+        "Tomi": "caricatura_tomi.png",
+        "Facu": "caricatura_Facu.png",
+        "Tano": "caricatura_tano.png",
+        "Rodri": "caricatura_rodri.png",
+        "Mono": "caricatura_mono.png",
+        "Blangi": "caricatura_blangi.png",
+        "FAK": "caricatura_fak.png",
+        "Kiki": "caricatura_kiki.png",
+        "Maxi": "caricatura_max.png",
+    };
+
+    let selectedPiece = "pieza_auto.png"; 
+    let currentUser = null;
+
+    // Estados de Gamificación
+    let varCharges = 3; 
+    let walichoSemanalUsado = false;
+    let walichoSufrido = null; 
+    let esMadrugadaSimulada = false;
+
+    // Fixture Oficial (72 Partidos)
+    const db = {
+        grupos: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L'],
+        partidosGrupos: [{"id": 1, "grupo": "A", "local": "México", "flagL": "🇲🇽", "visitante": "Sudáfrica", "flagV": "🇿🇦", "fecha": "Jornada 1"}, {"id": 2, "grupo": "A", "local": "Corea del Sur", "flagL": "🇰🇷", "visitante": "Chequia", "flagV": "🇨🇿", "fecha": "Jornada 1"}, {"id": 3, "grupo": "A", "local": "México", "flagL": "🇲🇽", "visitante": "Corea del Sur", "flagV": "🇰🇷", "fecha": "Jornada 2"}, {"id": 4, "grupo": "A", "local": "Chequia", "flagL": "🇨🇿", "visitante": "Sudáfrica", "flagV": "🇿🇦", "fecha": "Jornada 2"}, {"id": 5, "grupo": "A", "local": "Chequia", "flagL": "🇨🇿", "visitante": "México", "flagV": "🇲🇽", "fecha": "Jornada 3"}, {"id": 6, "grupo": "A", "local": "Sudáfrica", "flagL": "🇿🇦", "visitante": "Corea del Sur", "flagV": "🇰🇷", "fecha": "Jornada 3"}, {"id": 7, "grupo": "B", "local": "Canadá", "flagL": "🇨🇦", "visitante": "Bosnia y Herzegovina", "flagV": "🇧🇦", "fecha": "Jornada 1"}, {"id": 8, "grupo": "B", "local": "Qatar", "flagL": "🇶🇦", "visitante": "Suiza", "flagV": "🇨🇭", "fecha": "Jornada 1"}, {"id": 9, "grupo": "B", "local": "Canadá", "flagL": "🇨🇦", "visitante": "Qatar", "flagV": "🇶🇦", "fecha": "Jornada 2"}, {"id": 10, "grupo": "B", "local": "Suiza", "flagL": "🇨🇭", "visitante": "Bosnia y Herzegovina", "flagV": "🇧🇦", "fecha": "Jornada 2"}, {"id": 11, "grupo": "B", "local": "Suiza", "flagL": "🇨🇭", "visitante": "Canadá", "flagV": "🇨🇦", "fecha": "Jornada 3"}, {"id": 12, "grupo": "B", "local": "Bosnia y Herzegovina", "flagL": "🇧🇦", "visitante": "Qatar", "flagV": "🇶🇦", "fecha": "Jornada 3"}, {"id": 13, "grupo": "C", "local": "Brasil", "flagL": "🇧🇷", "visitante": "Marruecos", "flagV": "🇲🇦", "fecha": "Jornada 1"}, {"id": 14, "grupo": "C", "local": "Haití", "flagL": "🇭🇹", "visitante": "Escocia", "flagV": "🏴󠁧󠁢󠁳󠁣󠁴󠁿", "fecha": "Jornada 1"}, {"id": 15, "grupo": "C", "local": "Brasil", "flagL": "🇧🇷", "visitante": "Haití", "flagV": "🇭🇹", "fecha": "Jornada 2"}, {"id": 16, "grupo": "C", "local": "Escocia", "flagL": "🏴󠁧󠁢󠁳󠁣󠁴󠁿", "visitante": "Marruecos", "flagV": "🇲🇦", "fecha": "Jornada 2"}, {"id": 17, "grupo": "C", "local": "Escocia", "flagL": "🏴󠁧󠁢󠁳󠁣󠁴󠁿", "visitante": "Brasil", "flagV": "🇧🇷", "fecha": "Jornada 3"}, {"id": 18, "grupo": "C", "local": "Marruecos", "flagL": "🇲🇦", "visitante": "Haití", "flagV": "🇭🇹", "fecha": "Jornada 3"}, {"id": 19, "grupo": "D", "local": "Estados Unidos", "flagL": "🇺🇸", "visitante": "Paraguay", "flagV": "🇵🇾", "fecha": "Jornada 1"}, {"id": 20, "grupo": "D", "local": "Australia", "flagL": "🇦🇺", "visitante": "Turquía", "flagV": "🇹🇷", "fecha": "Jornada 1"}, {"id": 21, "grupo": "D", "local": "Estados Unidos", "flagL": "🇺🇸", "visitante": "Australia", "flagV": "🇦🇺", "fecha": "Jornada 2"}, {"id": 22, "grupo": "D", "local": "Turquía", "flagL": "🇹🇷", "visitante": "Paraguay", "flagV": "🇵🇾", "fecha": "Jornada 2"}, {"id": 23, "grupo": "D", "local": "Turquía", "flagL": "🇹🇷", "visitante": "Estados Unidos", "flagV": "🇺🇸", "fecha": "Jornada 3"}, {"id": 24, "grupo": "D", "local": "Paraguay", "flagL": "🇵🇾", "visitante": "Australia", "flagV": "🇦🇺", "fecha": "Jornada 3"}, {"id": 25, "grupo": "E", "local": "Alemania", "flagL": "🇩🇪", "visitante": "Curazao", "flagV": "🇨🇼", "fecha": "Jornada 1"}, {"id": 26, "grupo": "E", "local": "Costa de Marfil", "flagL": "🇨🇮", "visitante": "Ecuador", "flagV": "🇪🇨", "fecha": "Jornada 1"}, {"id": 27, "grupo": "E", "local": "Alemania", "flagL": "🇩🇪", "visitante": "Costa de Marfil", "flagV": "🇨🇮", "fecha": "Jornada 2"}, {"id": 28, "grupo": "E", "local": "Ecuador", "flagL": "🇪🇨", "visitante": "Curazao", "flagV": "🇨🇼", "fecha": "Jornada 2"}, {"id": 29, "grupo": "E", "local": "Ecuador", "flagL": "🇪🇨", "visitante": "Alemania", "flagV": "🇩🇪", "fecha": "Jornada 3"}, {"id": 30, "grupo": "E", "local": "Curazao", "flagL": "🇨🇼", "visitante": "Costa de Marfil", "flagV": "🇨🇮", "fecha": "Jornada 3"}, {"id": 31, "grupo": "F", "local": "Países Bajos", "flagL": "🇳🇱", "visitante": "Japón", "flagV": "🇯🇵", "fecha": "Jornada 1"}, {"id": 32, "grupo": "F", "local": "Suecia", "flagL": "🇸🇪", "visitante": "Túnez", "flagV": "🇹🇳", "fecha": "Jornada 1"}, {"id": 33, "grupo": "F", "local": "Países Bajos", "flagL": "🇳🇱", "visitante": "Suecia", "flagV": "🇸🇪", "fecha": "Jornada 2"}, {"id": 34, "grupo": "F", "local": "Túnez", "flagL": "🇹🇳", "visitante": "Japón", "flagV": "🇯🇵", "fecha": "Jornada 2"}, {"id": 35, "grupo": "F", "local": "Túnez", "flagL": "🇹🇳", "visitante": "Países Bajos", "flagV": "🇳🇱", "fecha": "Jornada 3"}, {"id": 36, "grupo": "F", "local": "Japón", "flagL": "🇯🇵", "visitante": "Suecia", "flagV": "🇸🇪", "fecha": "Jornada 3"}, {"id": 37, "grupo": "G", "local": "Bélgica", "flagL": "🇧🇪", "visitante": "Egipto", "flagV": "🇪🇬", "fecha": "Jornada 1"}, {"id": 38, "grupo": "G", "local": "Irán", "flagL": "🇮🇷", "visitante": "Nueva Zelanda", "flagV": "🇳🇿", "fecha": "Jornada 1"}, {"id": 39, "grupo": "G", "local": "Bélgica", "flagL": "🇧🇪", "visitante": "Irán", "flagV": "🇮🇷", "fecha": "Jornada 2"}, {"id": 40, "grupo": "G", "local": "Nueva Zelanda", "flagL": "🇳🇿", "visitante": "Egipto", "flagV": "🇪🇬", "fecha": "Jornada 2"}, {"id": 41, "grupo": "G", "local": "Nueva Zelanda", "flagL": "🇳🇿", "visitante": "Bélgica", "flagV": "🇧🇪", "fecha": "Jornada 3"}, {"id": 42, "grupo": "G", "local": "Egipto", "flagL": "🇪🇬", "visitante": "Irán", "flagV": "🇮🇷", "fecha": "Jornada 3"}, {"id": 43, "grupo": "H", "local": "España", "flagL": "🇪🇸", "visitante": "Cabo Verde", "flagV": "🇨🇻", "fecha": "Jornada 1"}, {"id": 44, "grupo": "H", "local": "Arabia Saudita", "flagL": "🇸🇦", "visitante": "Uruguay", "flagV": "🇺🇾", "fecha": "Jornada 1"}, {"id": 45, "grupo": "H", "local": "España", "flagL": "🇪🇸", "visitante": "Arabia Saudita", "flagV": "🇸🇦", "fecha": "Jornada 2"}, {"id": 46, "grupo": "H", "local": "Uruguay", "flagL": "🇺🇾", "visitante": "Cabo Verde", "flagV": "🇨🇻", "fecha": "Jornada 2"}, {"id": 47, "grupo": "H", "local": "Uruguay", "flagL": "🇺🇾", "visitante": "España", "flagV": "🇪🇸", "fecha": "Jornada 3"}, {"id": 48, "grupo": "H", "local": "Cabo Verde", "flagL": "🇨🇻", "visitante": "Arabia Saudita", "flagV": "🇸🇦", "fecha": "Jornada 3"}, {"id": 49, "grupo": "I", "local": "Francia", "flagL": "🇫🇷", "visitante": "Senegal", "flagV": "🇸🇳", "fecha": "Jornada 1"}, {"id": 50, "grupo": "I", "local": "Irak", "flagL": "🇮🇶", "visitante": "Noruega", "flagV": "🇳🇴", "fecha": "Jornada 1"}, {"id": 51, "grupo": "I", "local": "Francia", "flagL": "🇫🇷", "visitante": "Irak", "flagV": "🇮🇶", "fecha": "Jornada 2"}, {"id": 52, "grupo": "I", "local": "Noruega", "flagL": "🇳🇴", "visitante": "Senegal", "flagV": "🇸🇳", "fecha": "Jornada 2"}, {"id": 53, "grupo": "I", "local": "Noruega", "flagL": "🇳🇴", "visitante": "Francia", "flagV": "🇫🇷", "fecha": "Jornada 3"}, {"id": 54, "grupo": "I", "local": "Senegal", "flagL": "🇸🇳", "visitante": "Irak", "flagV": "🇮🇶", "fecha": "Jornada 3"}, {"id": 55, "grupo": "J", "local": "Argentina", "flagL": "🇦🇷", "visitante": "Argelia", "flagV": "🇩🇿", "fecha": "Jornada 1"}, {"id": 56, "grupo": "J", "local": "Austria", "flagL": "🇦🇹", "visitante": "Jordania", "flagV": "🇯🇴", "fecha": "Jornada 1"}, {"id": 57, "grupo": "J", "local": "Argentina", "flagL": "🇦🇷", "visitante": "Austria", "flagV": "🇦🇹", "fecha": "Jornada 2"}, {"id": 58, "grupo": "J", "local": "Jordania", "flagL": "🇯🇴", "visitante": "Argelia", "flagV": "🇩🇿", "fecha": "Jornada 2"}, {"id": 59, "grupo": "J", "local": "Jordania", "flagL": "🇯🇴", "visitante": "Argentina", "flagV": "🇦🇷", "fecha": "Jornada 3"}, {"id": 60, "grupo": "J", "local": "Argelia", "flagL": "🇩🇿", "visitante": "Austria", "flagV": "🇦🇹", "fecha": "Jornada 3"}, {"id": 61, "grupo": "K", "local": "Portugal", "flagL": "🇵🇹", "visitante": "RD Congo", "flagV": "🇨🇩", "fecha": "Jornada 1"}, {"id": 62, "grupo": "K", "local": "Uzbekistán", "flagL": "🇺🇿", "visitante": "Colombia", "flagV": "🇨🇴", "fecha": "Jornada 1"}, {"id": 63, "grupo": "K", "local": "Portugal", "flagL": "🇵🇹", "visitante": "Uzbekistán", "flagV": "🇺🇿", "fecha": "Jornada 2"}, {"id": 64, "grupo": "K", "local": "Colombia", "flagL": "🇨🇴", "visitante": "RD Congo", "flagV": "🇨🇩", "fecha": "Jornada 2"}, {"id": 65, "grupo": "K", "local": "Colombia", "flagL": "🇨🇴", "visitante": "Portugal", "flagV": "🇵🇹", "fecha": "Jornada 3"}, {"id": 66, "grupo": "K", "local": "RD Congo", "flagL": "🇨🇩", "visitante": "Uzbekistán", "flagV": "🇺🇿", "fecha": "Jornada 3"}, {"id": 67, "grupo": "L", "local": "Inglaterra", "flagL": "🇬🇧", "visitante": "Croacia", "flagV": "🇭🇷", "fecha": "Jornada 1"}, {"id": 68, "grupo": "L", "local": "Ghana", "flagL": "🇬🇭", "visitante": "Panamá", "flagV": "🇵🇦", "fecha": "Jornada 1"}, {"id": 69, "grupo": "L", "local": "Inglaterra", "flagL": "🇬🇧", "visitante": "Ghana", "flagV": "🇬🇭", "fecha": "Jornada 2"}, {"id": 70, "grupo": "L", "local": "Panamá", "flagL": "🇵🇦", "visitante": "Croacia", "flagV": "🇭🇷", "fecha": "Jornada 2"}, {"id": 71, "grupo": "L", "local": "Panamá", "flagL": "🇵🇦", "visitante": "Inglaterra", "flagV": "🇬🇧", "fecha": "Jornada 3"}, {"id": 72, "grupo": "L", "local": "Croacia", "flagL": "🇭🇷", "visitante": "Ghana", "flagV": "🇬🇭", "fecha": "Jornada 3"}],
+        prediccionesUsuario: JSON.parse(localStorage.getItem('prode_datos')) || {}
+    };
+
+    // ==========================================
+    // MOTOR DE AUDIO (Web Audio API & Temas)
+    // ==========================================
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    let audioCtx;
+    let audioActivo = null;
+    let audioTimeout = null;
+
+    // Playlist de temas principales
+    const playlist = ['audio-main_theme_1', 'audio-main_theme_2', 'audio-main_theme_3'];
+    let currentTrackIndex = 0;
+
+    function initAudio() {
+    if (!audioCtx) audioCtx = new AudioContext();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    
+    // Iniciar playlist en bucle
+    const firstTrack = document.getElementById(playlist[currentTrackIndex]);
+    firstTrack.play().catch(e => console.log("Esperando interacción para iniciar música"));
+    
+    // Listener para saltar a la siguiente canción
+    playlist.forEach(id => {
+        document.getElementById(id).onended = () => {
+            currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
+            document.getElementById(playlist[currentTrackIndex]).play();
+        };
+    });
+}
+
+    let clickCount = 0; let clickTimer;
+    function handleCoverClick() {
+        clickCount++; clearTimeout(clickTimer);
+        clickTimer = setTimeout(() => { clickCount = 0; }, 1500); 
+        if (clickCount === 5) {
+            clickCount = 0;
+            mostrarToast("¡Desbloqueaste el secreto de la foto grupal!", "var(--purple)");
+            document.body.style.backgroundColor = "white";
+            setTimeout(() => document.body.style.backgroundColor = "var(--bg-dark)", 100);
+            initAudio();
+            const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+            osc.type = 'square';
+            osc.frequency.setValueAtTime(440, audioCtx.currentTime); osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.30); osc.frequency.setValueAtTime(1760, audioCtx.currentTime + 0.2);
+            gain.gain.setValueAtTime(0.2, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.30);
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.30);
+        }
+    }
+
+    function playHoverSound(nombreJugador, esUltimo) {
+        if (currentUser && nombreJugador !== currentUser.username) {
+            initAudio();
+            const osc = audioCtx.createOscillator(); const gainNode = audioCtx.createGain();
+            if (esUltimo) {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(200, audioCtx.currentTime); osc.frequency.linearRampToValueAtTime(100, audioCtx.currentTime + 0.4); 
+                gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime); gainNode.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.4); 
+                osc.connect(gainNode); gainNode.connect(audioCtx.destination);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.4);
+            } else {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(350, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(700, audioCtx.currentTime + 0.08); 
+                gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime); gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.08); 
+                osc.connect(gainNode); gainNode.connect(audioCtx.destination);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.1);
+            }
+        }
+    }
+
+    // Función centralizada para temas de país (NO se reinicia si ya suena)
+function reproducirAudioTema(pais) {
+    const audioIds = {
+        "Argentina": "audio-argentina", "Brasil": "audio-brasil", "Francia": "audio-francia", 
+        "Estados Unidos": "audio-usa", "España": "audio-espana", "Alemania": "audio-alemania", 
+        "Colombia": "audio-colombia", "Países Bajos": "audio-holanda", "Uruguay": "audio-uruguay"
+        };
+        const reproductor = document.getElementById(audioIds[pais]);
+    if (!reproductor) return;
+
+    // Solo suena si NO está sonando ya
+    if (reproductor.paused) {
+        const bgTrack = document.getElementById(playlist[currentTrackIndex]);
+        if (bgTrack && !bgTrack.paused) bgTrack.pause();
+
+        reproductor.volume = 0.6;
+        reproductor.currentTime = 0;
+        reproductor.play().then(() => {
+            // Cortar a los 10 segundos si sigue sonando
+            const temaTimer = setTimeout(() => {
+                if (!reproductor.paused) {
+                    reproductor.pause();
+                    reproductor.currentTime = 0;
+                }
+                if (bgTrack) bgTrack.play().catch(() => {});
+            }, 10000);
+
+            reproductor.onended = () => {
+                clearTimeout(temaTimer);
+                if (bgTrack) bgTrack.play().catch(() => {}); // Vuelve al theme
+            };
+        }).catch(() => {});
+    }
+}
+
+
+    // Sonido para trucos y trampa (max 5 seg, pausa el tema de fondo mientras suena)
+    function playSfx(id) {
+        const sfx = document.getElementById(id);
+        const bgTrack = document.getElementById(playlist[currentTrackIndex]);
+
+        // Pausar tema de fondo
+        if (bgTrack && !bgTrack.paused) bgTrack.pause();
+
+        sfx.currentTime = 0;
+        sfx.play();
+
+        // Cortar a los 5 segundos si sigue sonando
+        const sfxTimer = setTimeout(() => {
+            if (!sfx.paused) {
+                sfx.pause();
+                sfx.currentTime = 0;
+            }
+            if (bgTrack) bgTrack.play().catch(() => {});
+        }, 5000);
+
+        // Al terminar antes de los 5 seg, retomar el tema de fondo
+        sfx.onended = () => {
+            clearTimeout(sfxTimer);
+            if (bgTrack) bgTrack.play().catch(() => {});
+        };
+    }
+
+
+    // ==========================================
+    // LOBBY Y LOGIN
+    // ==========================================
+    window.addEventListener('DOMContentLoaded', () => { 
+        document.getElementById('preview-piece').src = selectedPiece; 
+        document.getElementById('preview-piece').style.display = 'block'; 
+    });
+
+    function selectPiece(pieceFileName, element) { 
+        document.querySelectorAll('.piece-option').forEach(el => el.classList.remove('selected')); 
+        element.classList.add('selected'); selectedPiece = pieceFileName; 
+        document.getElementById('preview-piece').src = pieceFileName; 
+        document.getElementById('preview-piece').style.display = 'block'; 
+    }
+
+    function updateHeadPreview() { 
+        const name = document.getElementById('select-name').value; 
+        const headImgName = headsDatabase[name]; 
+        const preview = document.getElementById('preview-head'); 
+        preview.src = headImgName || ''; preview.style.display = headImgName ? 'block' : 'none'; 
+    }
+
+    function registerAndEnter() { 
+        const name = document.getElementById('select-name').value; 
+        if (!name) return alert("Por favor, seleccioná quién sos primero."); 
+        const userProfile = { username: name, head: headsDatabase[name] || 'cabeza_default.png', piece: selectedPiece }; 
+        localStorage.setItem('prode_user_profile', JSON.stringify(userProfile)); 
+        initAudio(); initApp(userProfile); 
+    }
+
+    window.onload = function() { 
+        const savedProfile = localStorage.getItem('prode_user_profile'); 
+        if (savedProfile) initApp(JSON.parse(savedProfile)); 
+    };
+
+    function logout() { localStorage.removeItem('prode_user_profile'); location.reload(); }
+
+    function initApp(profile) {
+        currentUser = profile; 
+        document.getElementById('screen-login').classList.remove('active'); 
+        document.getElementById('screen-app').classList.add('active');
+        document.getElementById('header-name').innerText = currentUser.username;
+
+        const headerHead = document.getElementById('header-head');
+        const headerPiece = document.getElementById('header-piece');
+        headerHead.src = currentUser.head;
+        headerHead.style.display = 'block';
+        headerPiece.src = currentUser.piece;
+        headerPiece.style.display = 'block';
+        
+        // Habilita panel dev si te llamas Emmanuel (como medida extra de admin)
+        // Se aplica al renderizar la pestaña de Reglas, donde el panel existe en el DOM
+        
+        renderFaseGrupos();
+    }
+
+
+    // ==========================================
+    // RENDERIZADO DE LA APLICACIÓN
+    // ==========================================
+    const contentDiv = document.getElementById('app-content');
+
+    function switchTab(tab, btn) { 
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active')); 
+        btn.classList.add('active'); 
+        if (tab === 'grupos') renderFaseGrupos(); 
+        if (tab === 'posiciones') renderPosiciones(); 
+        if (tab === 'reglas') renderReglas(); 
+        
+        // Toggle de visualización del botón flotante (solo en partidos)
+        document.getElementById('btn-walicho').style.display = (tab === 'grupos') ? 'flex' : 'none';
+    }
+
+    function renderFaseGrupos(grupoFiltro = 'A') {
+        let html = `<div class="filter-group"><select id="groupSelect" onchange="renderFaseGrupos(this.value)">${db.grupos.map(g => `<option value="${g}" ${g === grupoFiltro ? 'selected' : ''}>Filtrar: Grupo ${g}</option>`).join('')}</select></div><div id="matches-container">`;
+        
+        const partidos = db.partidosGrupos.filter(p => p.grupo === grupoFiltro);
+        
+        partidos.forEach(p => {
+            const predL = db.prediccionesUsuario[`${p.id}_L`] !== undefined ? db.prediccionesUsuario[`${p.id}_L`] : '';
+            const predV = db.prediccionesUsuario[`${p.id}_V`] !== undefined ? db.prediccionesUsuario[`${p.id}_V`] : '';
+            
+            let disableInput = (walichoSufrido && walichoSufrido.tipo === 'bloqueo' && walichoSufrido.partidoId == p.id) ? 'disabled' : '';
+            let lockStyle = disableInput ? 'background-color: #334155; cursor: not-allowed;' : '';
+
+            html += `
+            <div class="match-card">
+                <div class="match-header"><span>${p.fecha} • Grupo ${p.grupo}</span><span>⚽ Partido #${p.id}</span></div>
+                <div class="match-body">
+                    <div class="team local"><span class="flag">${p.flagL}</span><span>${p.local}</span></div>
+                    <div class="score-container">
+                        <input type="number" min="0" class="score-input" value="${predL}" onchange="savePred(${p.id}, 'L', this)" ${disableInput} style="${lockStyle}">
+                        <span style="color: var(--text-muted)">-</span>
+                        <input type="number" min="0" class="score-input" value="${predV}" onchange="savePred(${p.id}, 'V', this)" ${disableInput} style="${lockStyle}">
+                    </div>
+                    <div class="team away"><span class="flag">${p.flagV}</span><span>${p.visitante}</span></div>
+                </div>
+                <div class="critical-zone">
+                    <button class="skill-btn btn-dados" onclick="activarDados(${p.id})">🎲 Usar Dados</button>
+                    <button class="skill-btn btn-var" onclick="pedirVAR(${p.id})">📺 Pedir VAR (${varCharges})</button>
+                </div>
+            </div>`;
+        });
+
+        // TRAMPA CHILE AL FINAL
+        html += `
+        <div class="match-card" style="border-color: rgba(239, 68, 68, 0.5); background: linear-gradient(145deg, var(--bg-card), rgba(239, 68, 68, 0.05)); margin-top: 30px;">
+            <div class="match-header"><span style="color: var(--danger); font-weight:bold;">Partido Especial • Repechaje</span><span>⚽ Partido #999</span></div>
+            <div class="match-body">
+                <div class="team local"><span class="flag">🇨🇱</span><span>Chile</span></div>
+                <div class="score-container">
+                    <input type="text" class="score-input" oninput="bromaChile(this)" style="border-color: var(--danger);">
+                    <span style="color: var(--text-muted)">-</span>
+                    <input type="text" class="score-input" oninput="bromaChile(this)" style="border-color: var(--danger);">
+                </div>
+                <div class="team away"><span class="flag">🇮🇹</span><span>Italia</span></div>
+            </div>
+        </div>`;
+
+        html += `<button class="btn-primary" onclick="submitPredicciones()">Guardar Pronósticos</button></div>`;
+        contentDiv.innerHTML = html;
+    }
+
+    function renderPosiciones() {
+        contentDiv.innerHTML = `<div style="text-align:center; padding:40px; color:var(--text-muted);"><p>⏳ Actualizando tabla desde la base de datos...</p></div>`;
+        fetch(API_URL).then(res => res.json()).then(data => {
+            let filas = '';
+            if(data.length === 0) filas = `<tr><td colspan="4" style="color:var(--text-muted);">Aún no hay puntos calculados</td></tr>`;
+            else {
+                let totalJugadores = data.length;
+                data.forEach((jugador, index) => {
+                    let claseOro = jugador.posicion === 1 ? 'class="pos-1"' : '';
+                    let headImg = headsDatabase[jugador.jugador] || 'cabeza_default.png';
+                    // Si es el usuario actual, usamos su pieza local (más confiable que la de la API)
+                    let pieceImg = (currentUser && jugador.jugador === currentUser.username)
+                        ? currentUser.piece
+                        : (jugador.piece || 'pieza_auto.png');
+                    let hoverEffectClass = (currentUser && jugador.jugador !== currentUser.username) ? 'hover-effect' : '';
+                    let esUltimo = (index === totalJugadores - 1 && jugador.puntos === data[totalJugadores-1].puntos);
+                    filas += `
+                        <tr class="leaderboard-row ${hoverEffectClass}" onmouseenter="playHoverSound('${jugador.jugador}', ${esUltimo})">
+                            <td ${claseOro}>${jugador.posicion}</td>
+                            <td ${claseOro} style="text-align: left;">
+                                <div class="leaderboard-user">
+                                    <div class="leaderboard-avatar">
+                                        <img class="leaderboard-head" src="${headImg}" alt="cabeza" style="display:block;" onerror="this.style.display='none'">
+                                        <img class="leaderboard-piece" src="${pieceImg}" alt="pieza" style="display:block;" onerror="this.style.display='none'">
+                                    </div>
+                                    <span>${jugador.jugador}</span>
+                                </div>
+                            </td>
+                            <td ${claseOro}>${jugador.puntos}</td><td>${jugador.plenos}</td>
+                        </tr>`;
+                });
+            }
+            contentDiv.innerHTML = `<table class="leaderboard"><thead><tr><th>Pos</th><th style="text-align: left; padding-left: 50px;">Jugador</th><th>Pts</th><th>Exactos</th></tr></thead><tbody>${filas}</tbody></table>`;
+        }).catch(error => { contentDiv.innerHTML = `<div style="text-align:center; padding:40px; color:var(--danger);"><p>Aún no has conectado la URL del Apps Script o hay un error de red.</p></div>`; });
+    }
+
+    function renderReglas() { 
+        contentDiv.innerHTML = `
+        <div class="match-card" style="margin-top:10px;">
+            <h3 style="color:var(--accent); margin-bottom:15px;">Mecánicas Base</h3>
+            <ul class="rules-list">
+                <li><strong>1. Tendencia (1 pt) / Exacto (3 pts):</strong> Puntos estándar.</li>
+                <li><strong>2. Efecto Bola de Nieve:</strong> +3 pts extra si acertás algo en TODOS los partidos del grupo.</li>
+                <li><strong>3. Valla Invicta:</strong> +1 pt extra si predecís que un equipo termina en 0.</li>
+                <li><strong>4. El Batacazo:</strong> +2 pts si predecís que una potencia pierde y sucede.</li>
+            </ul>
+            <h3 style="color:var(--purple); margin-bottom:15px; margin-top:30px;">Habilidades (Gamificación)</h3>
+            <ul class="rules-list">
+                <li><strong>5. Comprar Dados 🎲 (Activa):</strong> Una vez cada 5 días podés destrabar la edición de un partido ya empezado.</li>
+                <li><strong>6. El Underdog (Pasiva):</strong> El que vaya último multiplica x2 lo que gane ese día.</li>
+                <li><strong>7. Campeón de Invierno:</strong> Premio especial al que lidere tras terminar la fase de grupos.</li>
+                <li><strong>8. VAR y Walichos 📺🍄:</strong> Tenés 3 usos de VAR en el torneo. Además, una vez por semana podés tirarle un Walicho a un rival para sabotearlo.</li>
+            </ul>
+        </div>
+        
+        <div class="dev-panel" id="panel-admin" style="display:none;">
+            <h4>🧪 Panel de Admin (Modo Dios)</h4>
+            <p style="margin-bottom:10px; color:var(--text-muted);">Simulá que te cayó una trampa o cambiá la hora para probar los secretos.</p>
+            <button class="dev-btn" onclick="simularWalicho('pares')">Walicho: Pares</button>
+            <button class="dev-btn" onclick="simularWalicho('impares')">Walicho: Impares</button>
+            <button class="dev-btn" onclick="simularWalicho('x2')">Walicho: x2</button>
+            <button class="dev-btn" onclick="simularWalicho(null)">Limpiar Walicho</button>
+            <hr style="border-color:#555; margin:10px 0;">
+            <button class="dev-btn" onclick="simularMadrugada()">Simular Reloj 3:00 AM</button>
+        </div>`; 
+        // Mostrar panel admin si corresponde
+        if (currentUser && currentUser.username === "Emmanuel") {
+            const adminPanel = document.getElementById('panel-admin');
+            if (adminPanel) adminPanel.style.display = 'block';
+        }
+    }
+
+
+    // ==========================================
+    // LÓGICA DE JUEGO Y GAMIFICACIÓN
+    // ==========================================
+    function savePred(id, type, inputEl) {
+    let val = parseInt(inputEl.value);
+    if (isNaN(val)) return;
+
+    const partido = db.partidosGrupos.find(p => p.id == id);
+    const paisesMusicales = ["Argentina", "Brasil", "Francia", "Estados Unidos", "España", "Alemania", "Colombia", "Países Bajos", "Uruguay"];
+
+    // Audio temático: solo se dispara la PRIMERA vez que se toca este partido
+    const yaTocoEstePartido = db.prediccionesUsuario[`${id}_L`] !== undefined || db.prediccionesUsuario[`${id}_V`] !== undefined;
+    if (!yaTocoEstePartido && partido) {
+        const paisConAudio = paisesMusicales.find(p => p === partido.local || p === partido.visitante);
+        if (paisConAudio) {
+            reproducirAudioTema(paisConAudio);
+        } else {
+            // País sin audio: "¿Estás seguro?" de forma muy aleatoria (8% de probabilidad)
+            if (Math.random() < 0.08) playSfx('audio-estas_seguro');
+        }
+    }
+
+    // Easter Egg: países débiles — también muy aleatorio (10%)
+    const debiles = ["Curazao", "Haití", "Jordania", "Panamá", "Argelia", "RD Congo"];
+    if (partido && (debiles.includes(partido.local) || debiles.includes(partido.visitante))) {
+        if (Math.random() < 0.10) playSfx('audio-estas_seguro');
+    }
+
+    // Lógica original de Walichos... (mantiene tu código anterior aquí)
+    db.prediccionesUsuario[`${id}_${type}`] = val;
+
+        // 1. Walichos Activos
+        if (walichoSufrido) {
+            if (walichoSufrido.tipo === 'pares' && val % 2 !== 0) { val++; mostrarToast("🍄 ¡Walicho de un Rival! Tus resultados se corrigen a PARES.", "var(--walicho)"); }
+            if (walichoSufrido.tipo === 'impares' && val % 2 === 0) { val++; mostrarToast("🍄 ¡Walicho de un Rival! Tus resultados se corrigen a IMPARES.", "var(--walicho)"); }
+            if (walichoSufrido.tipo === 'x2') { val = val * 2; mostrarToast("🍄 ¡Walicho! Viste doble, tus goles se multiplicaron x2.", "var(--walicho)"); }
+            inputEl.value = val;
+        }
+
+        db.prediccionesUsuario[`${id}_${type}`] = val; 
+        let localInput = db.prediccionesUsuario[`${id}_L`];
+        let awayInput = db.prediccionesUsuario[`${id}_V`];
+        
+        // 3. Easter Eggs
+        if (val == 7) mostrarToast("¿7 goles? Demasiado cine, intentá con algo más realista. 🇧🇷", "var(--danger)");
+        else if ((localInput == 3 && awayInput == 1) || (localInput == 1 && awayInput == 3)) mostrarToast("Y va el tercero... y va el tercero... 🐔", "var(--gold)");
+        else if ((localInput == 9 && awayInput == 12) || (localInput == 12 && awayInput == 9)) {
+            document.getElementById('river-anim').classList.add('show');
+            reproducirAudioTema('912');
+            setTimeout(() => document.getElementById('river-anim').classList.remove('show'), 4000);
+        }
+    }
+
+    function bromaChile(el) {
+        if(el.tagName === 'INPUT') el.value = '';
+        mostrarToast("jajajajajaj mentira... ¡Si lo miran por TV! 📺", "var(--danger)");
+    }
+
+    // Habilidades Activas
+    function activarDados(matchId) { 
+        playSfx('audio-trampa');
+        let es20Natural = Math.random() < 0.1; 
+        if (es20Natural) { mostrarToast("🎲 ¡Tiraste un 20 natural! El Master te aprueba el cambio de una.", "var(--gold)"); } 
+        else { mostrarToast("⏳ Enviando petición a los dioses...", "#a855f7"); } 
+        
+        const payload = { accion: "activar_dados", jugador: currentUser.username, match_id: matchId }; 
+        fetch(API_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
+        .then(() => { if(!es20Natural) mostrarToast("🎲 Petición enviada (Revisando cooldown)", "var(--purple)"); }); 
+    }
+
+    function pedirVAR(matchId) {
+        if (varCharges <= 0) return mostrarToast("📺 Se te agotó el crédito del VAR.", "var(--danger)");
+        let objetivo = prompt("📺 SALA DEL VAR\n\n¿La predicción de qué jugador querés espiar para este partido?");
+        if (objetivo) {
+            varCharges--;
+            mostrarToast(`📺 REVISIÓN TERMINADA: ${objetivo} puso un 2-0 acá.`, "var(--var-color)");
+            renderFaseGrupos(document.getElementById('groupSelect').value);
+        }
+    }
+
+    function abrirMenuWalicho() {
+        playSfx('audio-trampa');
+        if (walichoSemanalUsado) return mostrarToast("🍄 Ya usaste tu Walicho esta semana. Dejá jugar en paz.", "var(--danger)");
+        let victima = prompt("🍄 MENÚ DE WALICHOS 🍄\n\n¿A quién le querés arruinar la fecha? (Ej: Valentina)");
+        if (!victima) return;
+        let trampa = prompt(`Vas a maldecir a ${victima}.\nElegí el número de la trampa:\n1. Pies Redondos (Fuerza Pares)\n2. Pata Dura (Fuerza Impares)\n3. Espejismo (Multiplica x2)\n4. Candado (Bloquea Partido)`);
+        if (trampa) {
+            walichoSemanalUsado = true;
+            document.getElementById('btn-walicho').classList.add('usado');
+            mostrarToast(`🍄 ¡Le mandaste un Walicho a ${victima}!`, "var(--walicho)");
+        }
+    }
+
+    // Modo Dios (Testing Walichos localmente)
+    function simularWalicho(tipo) {
+        new (window.AudioContext || window.webkitAudioContext)().resume(); // Destraba audio
+        if (!tipo) { walichoSufrido = null; mostrarToast("✨ Limpiaste tu aura. Ya no tenés Walichos.", "var(--text-muted)"); } 
+        else { walichoSufrido = { tipo: tipo, partidoId: 1 }; mostrarToast(`Te acaban de tirar un Walicho: ${tipo.toUpperCase()}`, "var(--walicho)"); }
+        renderFaseGrupos(document.getElementById('groupSelect') ? document.getElementById('groupSelect').value : 'A');
+    }
+
+    function simularMadrugada() {
+        esMadrugadaSimulada = !esMadrugadaSimulada;
+        if (esMadrugadaSimulada) { document.body.classList.add('modo-madrugada'); mostrarToast("🌙 Reloj simulando las 3:30 AM", "var(--text-muted)"); } 
+        else { document.body.classList.remove('modo-madrugada'); mostrarToast("☀️ Reloj vuelto a la normalidad", "var(--text-muted)"); }
+    }
+
+    function submitPredicciones() {
+        let horaMundial = new Date().getHours();
+        localStorage.setItem('prode_datos', JSON.stringify(db.prediccionesUsuario));
+        const payload = { accion: "guardar_prediccion", jugador: currentUser.username, predicciones: db.prediccionesUsuario };
+        
+        if (esMadrugadaSimulada || (horaMundial >= 2 && horaMundial <= 5)) {
+            reproducirAudioTema('rock');
+            mostrarToast("🎸 Noche de insomnio guardada con éxito...", "var(--accent)");
+            fetch(API_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+        } else {
+            mostrarToast("⏳ Guardando en la base de datos...", "#eab308");
+            fetch(API_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
+            .then(() => mostrarToast("✅ ¡Pronósticos guardados con éxito!", "var(--success)"))
+            .catch(() => mostrarToast("❌ Error al guardar (verificá la URL)", "var(--danger)"));
+        }
+    }
+
+    function mostrarToast(mensaje, color) { 
+        const toast = document.getElementById('toast'); 
+        toast.innerText = mensaje; toast.style.backgroundColor = color; 
+        toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 3500); 
+    }
+</script>
+</body>
+</html>

@@ -16,21 +16,18 @@
         
         .app-container { width: 100%; max-width: 600px; display: flex; flex-direction: column; background-color: transparent; min-height: 100vh; position: relative;}
 
-        /* PORTADA */
         .cover-container { width: 100%; height: 200px; overflow: hidden; background-color: var(--bg-card); border-bottom: 2px solid var(--accent); cursor: pointer; user-select: none; }
         .cover-img { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; display: block; }
-
-        /* PANTALLAS */
         .screen { display: none; flex-direction: column; flex-grow: 1; }
         .screen.active { display: flex; }
 
-        /* LOBBY AVATARES */
         .lobby-container { padding: 30px 20px; text-align: center; background: var(--bg-dark); flex-grow:1; }
         .lobby-title { color: var(--gold); font-size: 1.8rem; text-transform: uppercase; margin-bottom: 5px; }
         .lobby-subtitle { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 30px; }
         .form-group { margin-bottom: 25px; text-align: left; }
         .form-group label { display: block; margin-bottom: 8px; color: var(--accent); font-weight: bold; }
-        .form-group select { width: 100%; padding: 12px; background-color: var(--bg-card); color: white; border: 1px solid var(--border); border-radius: 8px; font-size: 1rem; outline: none; }
+        .form-group select { width: 100%; padding: 12px; background-color: var(--bg-card); color: white; border: 1px solid var(--border); border-radius: 8px; font-size: 1rem; outline: none; margin-bottom: 10px;}
+        
         .pieces-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px; }
         .piece-option { background-color: var(--bg-card); border: 2px solid var(--border); border-radius: 10px; padding: 15px 5px; cursor: pointer; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
         .piece-option:hover { border-color: var(--accent-hover); }
@@ -38,13 +35,11 @@
         .piece-option img, .piece-option .emoji-placeholder { width: 40px; height: 40px; object-fit: contain; margin-bottom: 5px; display: flex; align-items: center; justify-content: center; font-size: 30px; }
         .piece-option span { font-size: 0.75rem; color: var(--text-muted); font-weight: 600; }
         
-        /* AVATAR COMPUESTO CORREGIDO */
         .avatar-preview-box { background-color: #0d121f; border: 1px dashed var(--border); border-radius: 12px; padding: 15px; margin-top: 20px; display: flex; flex-direction: column; align-items: center; }
         .composite-avatar { position: relative; width: 100px; height: 100px; margin: 0 auto; }
         .composite-head { position: absolute; bottom: 35px; left: 50%; transform: translateX(-50%); width: 60px; height: 60px; object-fit: contain; z-index: 2; transition: all 0.3s ease; }
         .composite-piece { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 70px; height: 70px; object-fit: contain; z-index: 1; transition: all 0.3s ease; }
 
-        /* HEADER APP */
         header { background-color: var(--bg-card); padding: 15px 20px 0 20px; text-align: center; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
         .user-profile-header { display: flex; align-items: center; justify-content: flex-start; gap: 15px; margin-bottom: 15px; background: rgba(0,0,0,0.2); padding: 10px 15px; border-radius: 12px; }
         .mini-avatar { position: relative; width: 50px; height: 50px; }
@@ -60,7 +55,6 @@
         .tab-btn { background: transparent; color: var(--text-muted); border: none; padding: 8px 12px; font-size: 0.9rem; font-weight: 600; cursor: pointer; white-space: nowrap; border-bottom: 2px solid transparent; transition: all 0.2s; }
         .tab-btn.active { color: var(--accent); border-bottom: 2px solid var(--accent); }
 
-        /* MAIN APP */
         main { padding: 20px; flex-grow: 1; overflow-y: auto; background: var(--bg-dark);}
         .filter-group { display: flex; gap: 10px; margin-bottom: 20px; }
         .filter-group select { flex: 1; padding: 12px; background-color: var(--accent); color: var(--bg-dark); font-weight:bold; border: none; border-radius: 8px; font-size: 1rem; outline: none; }
@@ -76,7 +70,6 @@
         .score-input { width: 45px; height: 45px; text-align: center; font-size: 1.2rem; font-weight: bold; background-color: var(--bg-dark); color: var(--text-main); border: 1px solid var(--border); border-radius: 8px; outline: none; transition: background-color 0.2s; }
         .score-input:focus { border-color: var(--accent); }
         
-        /* BOTONES HABILIDADES */
         .critical-zone { margin-top: 15px; padding-top: 12px; border-top: 1px dashed var(--border); display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
         .skill-btn { display: flex; align-items: center; gap: 5px; cursor: pointer; font-size: 0.8rem; padding: 8px 12px; border-radius: 20px; font-weight: bold; transition: all 0.2s; border: 1px solid transparent; }
         .btn-dados { color: var(--purple); background: rgba(168, 85, 247, 0.1); border-color: rgba(168, 85, 247, 0.3); }
@@ -89,12 +82,10 @@
         #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background-color: var(--success); color: white; padding: 12px 24px; border-radius: 30px; font-weight: bold; font-size: 0.9rem; opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 1000; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.5);}
         #toast.show { opacity: 1; bottom: 30px; }
 
-        /* BOTÓN FLOTANTE WALICHO */
         .fab-walicho { position: fixed; bottom: 30px; right: 20px; width: 60px; height: 60px; background: linear-gradient(135deg, #d946ef, #9333ea); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 15px rgba(192, 38, 211, 0.5); cursor: pointer; z-index: 100; transition: transform 0.2s; border: 2px solid #fdf4ff;}
         .fab-walicho:hover { transform: scale(1.1) rotate(10deg); }
         .fab-walicho.usado { filter: grayscale(1); opacity: 0.5; cursor: not-allowed; }
 
-        /* TABLA POSICIONES */
         .leaderboard { width: 100%; border-collapse: collapse; margin-top: 10px; }
         .leaderboard th, .leaderboard td { padding: 12px; text-align: center; border-bottom: 1px solid var(--border); }
         .leaderboard th { color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; }
@@ -107,7 +98,6 @@
         .leaderboard-head { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); width: 25px; height: 25px; object-fit: contain; z-index: 2; pointer-events: none;}
         .leaderboard-piece { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 30px; height: 30px; object-fit: contain; z-index: 1; pointer-events: none;}
 
-        /* REGLAS Y PANEL DEV */
         .rules-list { list-style: none; color: var(--text-muted); line-height: 1.6; }
         .rules-list li { margin-bottom: 15px; background: var(--bg-dark); padding: 12px; border-radius: 8px; border-left: 4px solid var(--accent); }
         .rules-list strong { color: white; display: block; margin-bottom: 4px; }
@@ -117,7 +107,6 @@
         .dev-btn { background: #334155; color: white; border: none; padding: 8px 12px; margin: 3px; border-radius: 6px; cursor: pointer; transition: 0.2s;}
         .dev-btn:hover { background: #475569; }
 
-        /* 9-12 ANIMATION */
         .river-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: repeating-linear-gradient(45deg, #fff, #fff 40px, #ef4444 40px, #ef4444 80px); opacity: 0; pointer-events: none; z-index: 9999; transition: opacity 0.5s; display: flex; align-items:center; justify-content:center;}
         .river-overlay h1 { background: black; color: white; padding: 20px; border-radius: 10px; font-size: 3rem; text-align:center; transform: scale(0.5); transition: transform 0.5s; box-shadow: 0 10px 30px rgba(0,0,0,0.5);}
         .river-overlay.show { opacity: 0.9; }
@@ -129,8 +118,8 @@
 <audio id="audio-main_theme_1" src="main_theme_1.mp3" preload="auto"></audio>
 <audio id="audio-main_theme_2" src="main_theme_2.mp3" preload="auto"></audio>
 <audio id="audio-main_theme_3" src="main_theme_3.mp3" preload="auto"></audio>
+
 <audio id="audio-argentina" src="argentina.mp3" preload="auto"></audio>
-<audio id="audio-mexico" src="mexico.mp3" preload="auto"></audio>
 <audio id="audio-brasil" src="magalenha.mp3" preload="auto"></audio>
 <audio id="audio-francia" src="francia.mp3" preload="auto"></audio>
 <audio id="audio-usa" src="usa.mp3" preload="auto"></audio>
@@ -139,11 +128,11 @@
 <audio id="audio-colombia" src="colombia.mp3" preload="auto"></audio>
 <audio id="audio-holanda" src="holanda.mp3" preload="auto"></audio>
 <audio id="audio-uruguay" src="uruguay.ogg" preload="auto"></audio>
+
 <audio id="audio-rock" src="rock.mp3" preload="auto"></audio>
 <audio id="audio-912" src="912.mp3" preload="auto"></audio>
 <audio id="audio-estas_seguro" src="estas_seguro.ogg" preload="auto"></audio>
 <audio id="audio-trampa" src="trampa.mp3" preload="auto"></audio>
-
 
 <div class="river-overlay" id="river-anim">
     <h1>🏆 LA GLORIA ETERNA 🏆<br><span style="font-size:1rem; font-weight:normal;">(+0 Pts, pero mis respetos)</span></h1>
@@ -157,7 +146,7 @@
     <div id="screen-login" class="screen active">
         <div class="lobby-container">
             <h1 class="lobby-title">Creá tu Avatar</h1>
-            <p class="lobby-subtitle">Elegí tu jugador y tu pieza para entrar al tablero</p>
+            <p class="lobby-subtitle">Elegí tu jugador, tu pieza y tus campeones.</p>
 
             <div class="form-group">
                 <label>1. ¿Quién sos?</label>
@@ -180,81 +169,46 @@
                 <label>2. Elegí tu Ficha Base</label>
                 <div class="pieces-grid">
                     <div class="piece-option selected" onclick="selectPiece('pieza_auto.png', this)">
-                        <img src="pieza_auto.png" alt="Auto" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                        <div class="emoji-placeholder" style="display:none;">🚗</div>
-                        <span>El Auto</span>
+                        <div class="emoji-placeholder">🚗</div><span>Auto</span>
                     </div>
                     <div class="piece-option" onclick="selectPiece('pieza_perro.png', this)">
-                        <img src="pieza_perro.png" alt="Perro" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                        <div class="emoji-placeholder" style="display:none;">🐕</div>
-                        <span>El Perro</span>
+                        <div class="emoji-placeholder">🐕</div><span>Perro</span>
                     </div>
                     <div class="piece-option" onclick="selectPiece('pieza_sombrero.png', this)">
-                        <img src="pieza_sombrero.png" alt="Sombrero" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                        <div class="emoji-placeholder" style="display:none;">🎩</div>
-                        <span>La Galera</span>
+                        <div class="emoji-placeholder">🎩</div><span>Galera</span>
                     </div>
                     <div class="piece-option" onclick="selectPiece('pieza_banana.png', this)">
-                        <img src="pieza_banana.png" alt="Banana" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                        <div class="emoji-placeholder" style="display:none;">🍌</div>
-                        <span>La Banana</span>    
+                        <div class="emoji-placeholder">🍌</div><span>Banana</span>
                     </div>
                     <div class="piece-option" onclick="selectPiece('pieza_pelota_futbol.png', this)">
-                        <img src="pieza_pelota_futbol.png" alt="Pelota de Fútbol" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                        <div class="emoji-placeholder" style="display:none;">⚽</div>
-                        <span>La Pelota de Fútbol</span>    
+                        <div class="emoji-placeholder">⚽</div><span>Pelota</span>
                     </div>
                     <div class="piece-option" onclick="selectPiece('pieza_hormiga.png', this)">
-                        <img src="pieza_hormiga.png" alt="Hormiga" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                        <div class="emoji-placeholder" style="display:none;">🐜</div>
-                        <span>La Hormiga</span>    
+                        <div class="emoji-placeholder">🐜</div><span>Hormiga</span>
                     </div>
                     <div class="piece-option" onclick="selectPiece('pieza_maletin.png', this)">
-                        <img src="pieza_maletin.png" alt="Maletín" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                        <div class="emoji-placeholder" style="display:none;">💼</div>
-                        <span>El Maletín</span>    
+                        <div class="emoji-placeholder">💼</div><span>Maletín</span>
                     </div>
                     <div class="piece-option" onclick="selectPiece('pieza_mono.png', this)">
-                        <img src="pieza_mono.png" alt="Mono" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                        <div class="emoji-placeholder" style="display:none;">🐵</div>
-                        <span>El Mono</span>    
+                        <div class="emoji-placeholder">🐵</div><span>Mono</span>
                     </div>
                     <div class="piece-option" onclick="selectPiece('pieza_joystick.png', this)">
-                        <img src="pieza_joystick.png" alt="Joystick" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                        <div class="emoji-placeholder" style="display:none;">🎮</div>
-                        <span>El Joystick</span>    
-                    </div>
-                    <div class="piece-option" onclick="selectPiece('pieza_tornillo.png', this)">
-                        <img src="pieza_tornillo.png" alt="Tornillo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                        <div class="emoji-placeholder" style="display:none;">🔧</div>
-                        <span>El Tornillo</span>    
-                    </div>
-                    <div class="piece-option" onclick="selectPiece('pieza_mancuerna.png', this)">
-                        <img src="pieza_mancuerna.png" alt="Mancuerna" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                        <div class="emoji-placeholder" style="display:none;">💪</div>
-                        <span>La Mancuerna</span>    
-                    </div>
-                    <div class="piece-option" onclick="selectPiece('pieza_galleta.png', this)">
-                        <img src="pieza_galleta.png" alt="Galleta" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                        <div class="emoji-placeholder" style="display:none;">🍪</div>
-                        <span>La Galleta</span>    
-                    </div>
-                    <div class="piece-option" onclick="selectPiece('pieza_heladera.png', this)">
-                        <img src="pieza_heladera.png" alt="Heladera" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                        <div class="emoji-placeholder" style="display:none;">🧊</div>
-                        <span>La Heladera</span>    
-                    </div>
-                    <div class="piece-option" onclick="selectPiece('pieza_mate.png', this)">
-                        <img src="pieza_mate.png" alt="Mate" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                        <div class="emoji-placeholder" style="display:none;">☕</div>
-                        <span>El Mate</span>    
-                    </div>
-                    <div class="piece-option" onclick="selectPiece('pieza_jirafa.png', this)">
-                        <img src="pieza_jirafa.png" alt="Jirafa" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                        <div class="emoji-placeholder" style="display:none;">🦒</div>
-                        <span>La Jirafa</span>    
+                        <div class="emoji-placeholder">🎮</div><span>Joystick</span>
                     </div>
                 </div>
+            </div>
+
+            <div class="form-group">
+                <label>3. Elegí el Podio Final del Mundial</label>
+                <select id="select-campeon">
+                    <option value="" disabled selected>🏆 Campeón...</option>
+                </select>
+                <select id="select-subcampeon">
+                    <option value="" disabled selected>🥈 Subcampeón...</option>
+                </select>
+                <select id="select-tercero">
+                    <option value="" disabled selected>🥉 Tercer Puesto...</option>
+                </select>
             </div>
 
             <div class="avatar-preview-box">
@@ -297,201 +251,210 @@
 
 <script>
     // ==========================================
-    // CONFIGURACIÓN PRINCIPAL Y BASE DE DATOS
+    // 1. CONFIGURACIÓN Y BASE DE DATOS
     // ==========================================
-    
-    // PEGÁ ACÁ LA URL DE TU APPS SCRIPT
-    const API_URL = "https://script.google.com/macros/s/AKfycbyhFpd3I1saC8GYW7ebl_c5xHaGMTPONn8b2y_kNEr1rA9MV8YflQkvgAv_1LfIrCA/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbyZ-uIeCnDe0WVcC530BZwWkVBaJXqjOM7sgu7qBcE74iTcLfvM2Hz72LIUTbOh_5A/exec";
 
     const headsDatabase = {
-        "Emma": "caricatura_emma.png",
-        "Tomi": "caricatura_tomi.png",
-        "Facu": "caricatura_Facu.png",
-        "Tano": "caricatura_tano.png",
-        "Rodri": "caricatura_rodri.png",
-        "Mono": "caricatura_mono.png",
-        "Blangi": "caricatura_blangi.png",
-        "FAK": "caricatura_fak.png",
-        "Kiki": "caricatura_kiki.png",
-        "Maxi": "caricatura_max.png",
+        "Emma": "caricatura_emma.png", "Tomi": "caricatura_tomi.png", "Facu": "caricatura_Facu.png",
+        "Tano": "caricatura_tano.png", "Rodri": "caricatura_rodri.png", "Mono": "caricatura_mono.png",
+        "Blangi": "caricatura_blangi.png", "FAK": "caricatura_fak.png", "Kiki": "caricatura_kiki.png",
+        "Maxi": "caricatura_max.png"
     };
 
     let selectedPiece = "pieza_auto.png"; 
     let currentUser = null;
-
-    // Estados de Gamificación
-    let varCharges = 3; 
-    let walichoSemanalUsado = false;
-    let walichoSufrido = null; 
-    let esMadrugadaSimulada = false;
+    let varCharges = 3; let walichoSemanalUsado = false; let walichoSufrido = null; let esMadrugadaSimulada = false;
 
     // Fixture Oficial (72 Partidos)
     const db = {
         grupos: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L'],
-        partidosGrupos: [{"id": 1, "grupo": "A", "local": "México", "flagL": "🇲🇽", "visitante": "Sudáfrica", "flagV": "🇿🇦", "fecha": "Jornada 1"}, {"id": 2, "grupo": "A", "local": "Corea del Sur", "flagL": "🇰🇷", "visitante": "Chequia", "flagV": "🇨🇿", "fecha": "Jornada 1"}, {"id": 3, "grupo": "A", "local": "México", "flagL": "🇲🇽", "visitante": "Corea del Sur", "flagV": "🇰🇷", "fecha": "Jornada 2"}, {"id": 4, "grupo": "A", "local": "Chequia", "flagL": "🇨🇿", "visitante": "Sudáfrica", "flagV": "🇿🇦", "fecha": "Jornada 2"}, {"id": 5, "grupo": "A", "local": "Chequia", "flagL": "🇨🇿", "visitante": "México", "flagV": "🇲🇽", "fecha": "Jornada 3"}, {"id": 6, "grupo": "A", "local": "Sudáfrica", "flagL": "🇿🇦", "visitante": "Corea del Sur", "flagV": "🇰🇷", "fecha": "Jornada 3"}, {"id": 7, "grupo": "B", "local": "Canadá", "flagL": "🇨🇦", "visitante": "Bosnia y Herzegovina", "flagV": "🇧🇦", "fecha": "Jornada 1"}, {"id": 8, "grupo": "B", "local": "Qatar", "flagL": "🇶🇦", "visitante": "Suiza", "flagV": "🇨🇭", "fecha": "Jornada 1"}, {"id": 9, "grupo": "B", "local": "Canadá", "flagL": "🇨🇦", "visitante": "Qatar", "flagV": "🇶🇦", "fecha": "Jornada 2"}, {"id": 10, "grupo": "B", "local": "Suiza", "flagL": "🇨🇭", "visitante": "Bosnia y Herzegovina", "flagV": "🇧🇦", "fecha": "Jornada 2"}, {"id": 11, "grupo": "B", "local": "Suiza", "flagL": "🇨🇭", "visitante": "Canadá", "flagV": "🇨🇦", "fecha": "Jornada 3"}, {"id": 12, "grupo": "B", "local": "Bosnia y Herzegovina", "flagL": "🇧🇦", "visitante": "Qatar", "flagV": "🇶🇦", "fecha": "Jornada 3"}, {"id": 13, "grupo": "C", "local": "Brasil", "flagL": "🇧🇷", "visitante": "Marruecos", "flagV": "🇲🇦", "fecha": "Jornada 1"}, {"id": 14, "grupo": "C", "local": "Haití", "flagL": "🇭🇹", "visitante": "Escocia", "flagV": "🏴󠁧󠁢󠁳󠁣󠁴󠁿", "fecha": "Jornada 1"}, {"id": 15, "grupo": "C", "local": "Brasil", "flagL": "🇧🇷", "visitante": "Haití", "flagV": "🇭🇹", "fecha": "Jornada 2"}, {"id": 16, "grupo": "C", "local": "Escocia", "flagL": "🏴󠁧󠁢󠁳󠁣󠁴󠁿", "visitante": "Marruecos", "flagV": "🇲🇦", "fecha": "Jornada 2"}, {"id": 17, "grupo": "C", "local": "Escocia", "flagL": "🏴󠁧󠁢󠁳󠁣󠁴󠁿", "visitante": "Brasil", "flagV": "🇧🇷", "fecha": "Jornada 3"}, {"id": 18, "grupo": "C", "local": "Marruecos", "flagL": "🇲🇦", "visitante": "Haití", "flagV": "🇭🇹", "fecha": "Jornada 3"}, {"id": 19, "grupo": "D", "local": "Estados Unidos", "flagL": "🇺🇸", "visitante": "Paraguay", "flagV": "🇵🇾", "fecha": "Jornada 1"}, {"id": 20, "grupo": "D", "local": "Australia", "flagL": "🇦🇺", "visitante": "Turquía", "flagV": "🇹🇷", "fecha": "Jornada 1"}, {"id": 21, "grupo": "D", "local": "Estados Unidos", "flagL": "🇺🇸", "visitante": "Australia", "flagV": "🇦🇺", "fecha": "Jornada 2"}, {"id": 22, "grupo": "D", "local": "Turquía", "flagL": "🇹🇷", "visitante": "Paraguay", "flagV": "🇵🇾", "fecha": "Jornada 2"}, {"id": 23, "grupo": "D", "local": "Turquía", "flagL": "🇹🇷", "visitante": "Estados Unidos", "flagV": "🇺🇸", "fecha": "Jornada 3"}, {"id": 24, "grupo": "D", "local": "Paraguay", "flagL": "🇵🇾", "visitante": "Australia", "flagV": "🇦🇺", "fecha": "Jornada 3"}, {"id": 25, "grupo": "E", "local": "Alemania", "flagL": "🇩🇪", "visitante": "Curazao", "flagV": "🇨🇼", "fecha": "Jornada 1"}, {"id": 26, "grupo": "E", "local": "Costa de Marfil", "flagL": "🇨🇮", "visitante": "Ecuador", "flagV": "🇪🇨", "fecha": "Jornada 1"}, {"id": 27, "grupo": "E", "local": "Alemania", "flagL": "🇩🇪", "visitante": "Costa de Marfil", "flagV": "🇨🇮", "fecha": "Jornada 2"}, {"id": 28, "grupo": "E", "local": "Ecuador", "flagL": "🇪🇨", "visitante": "Curazao", "flagV": "🇨🇼", "fecha": "Jornada 2"}, {"id": 29, "grupo": "E", "local": "Ecuador", "flagL": "🇪🇨", "visitante": "Alemania", "flagV": "🇩🇪", "fecha": "Jornada 3"}, {"id": 30, "grupo": "E", "local": "Curazao", "flagL": "🇨🇼", "visitante": "Costa de Marfil", "flagV": "🇨🇮", "fecha": "Jornada 3"}, {"id": 31, "grupo": "F", "local": "Países Bajos", "flagL": "🇳🇱", "visitante": "Japón", "flagV": "🇯🇵", "fecha": "Jornada 1"}, {"id": 32, "grupo": "F", "local": "Suecia", "flagL": "🇸🇪", "visitante": "Túnez", "flagV": "🇹🇳", "fecha": "Jornada 1"}, {"id": 33, "grupo": "F", "local": "Países Bajos", "flagL": "🇳🇱", "visitante": "Suecia", "flagV": "🇸🇪", "fecha": "Jornada 2"}, {"id": 34, "grupo": "F", "local": "Túnez", "flagL": "🇹🇳", "visitante": "Japón", "flagV": "🇯🇵", "fecha": "Jornada 2"}, {"id": 35, "grupo": "F", "local": "Túnez", "flagL": "🇹🇳", "visitante": "Países Bajos", "flagV": "🇳🇱", "fecha": "Jornada 3"}, {"id": 36, "grupo": "F", "local": "Japón", "flagL": "🇯🇵", "visitante": "Suecia", "flagV": "🇸🇪", "fecha": "Jornada 3"}, {"id": 37, "grupo": "G", "local": "Bélgica", "flagL": "🇧🇪", "visitante": "Egipto", "flagV": "🇪🇬", "fecha": "Jornada 1"}, {"id": 38, "grupo": "G", "local": "Irán", "flagL": "🇮🇷", "visitante": "Nueva Zelanda", "flagV": "🇳🇿", "fecha": "Jornada 1"}, {"id": 39, "grupo": "G", "local": "Bélgica", "flagL": "🇧🇪", "visitante": "Irán", "flagV": "🇮🇷", "fecha": "Jornada 2"}, {"id": 40, "grupo": "G", "local": "Nueva Zelanda", "flagL": "🇳🇿", "visitante": "Egipto", "flagV": "🇪🇬", "fecha": "Jornada 2"}, {"id": 41, "grupo": "G", "local": "Nueva Zelanda", "flagL": "🇳🇿", "visitante": "Bélgica", "flagV": "🇧🇪", "fecha": "Jornada 3"}, {"id": 42, "grupo": "G", "local": "Egipto", "flagL": "🇪🇬", "visitante": "Irán", "flagV": "🇮🇷", "fecha": "Jornada 3"}, {"id": 43, "grupo": "H", "local": "España", "flagL": "🇪🇸", "visitante": "Cabo Verde", "flagV": "🇨🇻", "fecha": "Jornada 1"}, {"id": 44, "grupo": "H", "local": "Arabia Saudita", "flagL": "🇸🇦", "visitante": "Uruguay", "flagV": "🇺🇾", "fecha": "Jornada 1"}, {"id": 45, "grupo": "H", "local": "España", "flagL": "🇪🇸", "visitante": "Arabia Saudita", "flagV": "🇸🇦", "fecha": "Jornada 2"}, {"id": 46, "grupo": "H", "local": "Uruguay", "flagL": "🇺🇾", "visitante": "Cabo Verde", "flagV": "🇨🇻", "fecha": "Jornada 2"}, {"id": 47, "grupo": "H", "local": "Uruguay", "flagL": "🇺🇾", "visitante": "España", "flagV": "🇪🇸", "fecha": "Jornada 3"}, {"id": 48, "grupo": "H", "local": "Cabo Verde", "flagL": "🇨🇻", "visitante": "Arabia Saudita", "flagV": "🇸🇦", "fecha": "Jornada 3"}, {"id": 49, "grupo": "I", "local": "Francia", "flagL": "🇫🇷", "visitante": "Senegal", "flagV": "🇸🇳", "fecha": "Jornada 1"}, {"id": 50, "grupo": "I", "local": "Irak", "flagL": "🇮🇶", "visitante": "Noruega", "flagV": "🇳🇴", "fecha": "Jornada 1"}, {"id": 51, "grupo": "I", "local": "Francia", "flagL": "🇫🇷", "visitante": "Irak", "flagV": "🇮🇶", "fecha": "Jornada 2"}, {"id": 52, "grupo": "I", "local": "Noruega", "flagL": "🇳🇴", "visitante": "Senegal", "flagV": "🇸🇳", "fecha": "Jornada 2"}, {"id": 53, "grupo": "I", "local": "Noruega", "flagL": "🇳🇴", "visitante": "Francia", "flagV": "🇫🇷", "fecha": "Jornada 3"}, {"id": 54, "grupo": "I", "local": "Senegal", "flagL": "🇸🇳", "visitante": "Irak", "flagV": "🇮🇶", "fecha": "Jornada 3"}, {"id": 55, "grupo": "J", "local": "Argentina", "flagL": "🇦🇷", "visitante": "Argelia", "flagV": "🇩🇿", "fecha": "Jornada 1"}, {"id": 56, "grupo": "J", "local": "Austria", "flagL": "🇦🇹", "visitante": "Jordania", "flagV": "🇯🇴", "fecha": "Jornada 1"}, {"id": 57, "grupo": "J", "local": "Argentina", "flagL": "🇦🇷", "visitante": "Austria", "flagV": "🇦🇹", "fecha": "Jornada 2"}, {"id": 58, "grupo": "J", "local": "Jordania", "flagL": "🇯🇴", "visitante": "Argelia", "flagV": "🇩🇿", "fecha": "Jornada 2"}, {"id": 59, "grupo": "J", "local": "Jordania", "flagL": "🇯🇴", "visitante": "Argentina", "flagV": "🇦🇷", "fecha": "Jornada 3"}, {"id": 60, "grupo": "J", "local": "Argelia", "flagL": "🇩🇿", "visitante": "Austria", "flagV": "🇦🇹", "fecha": "Jornada 3"}, {"id": 61, "grupo": "K", "local": "Portugal", "flagL": "🇵🇹", "visitante": "RD Congo", "flagV": "🇨🇩", "fecha": "Jornada 1"}, {"id": 62, "grupo": "K", "local": "Uzbekistán", "flagL": "🇺🇿", "visitante": "Colombia", "flagV": "🇨🇴", "fecha": "Jornada 1"}, {"id": 63, "grupo": "K", "local": "Portugal", "flagL": "🇵🇹", "visitante": "Uzbekistán", "flagV": "🇺🇿", "fecha": "Jornada 2"}, {"id": 64, "grupo": "K", "local": "Colombia", "flagL": "🇨🇴", "visitante": "RD Congo", "flagV": "🇨🇩", "fecha": "Jornada 2"}, {"id": 65, "grupo": "K", "local": "Colombia", "flagL": "🇨🇴", "visitante": "Portugal", "flagV": "🇵🇹", "fecha": "Jornada 3"}, {"id": 66, "grupo": "K", "local": "RD Congo", "flagL": "🇨🇩", "visitante": "Uzbekistán", "flagV": "🇺🇿", "fecha": "Jornada 3"}, {"id": 67, "grupo": "L", "local": "Inglaterra", "flagL": "🇬🇧", "visitante": "Croacia", "flagV": "🇭🇷", "fecha": "Jornada 1"}, {"id": 68, "grupo": "L", "local": "Ghana", "flagL": "🇬🇭", "visitante": "Panamá", "flagV": "🇵🇦", "fecha": "Jornada 1"}, {"id": 69, "grupo": "L", "local": "Inglaterra", "flagL": "🇬🇧", "visitante": "Ghana", "flagV": "🇬🇭", "fecha": "Jornada 2"}, {"id": 70, "grupo": "L", "local": "Panamá", "flagL": "🇵🇦", "visitante": "Croacia", "flagV": "🇭🇷", "fecha": "Jornada 2"}, {"id": 71, "grupo": "L", "local": "Panamá", "flagL": "🇵🇦", "visitante": "Inglaterra", "flagV": "🇬🇧", "fecha": "Jornada 3"}, {"id": 72, "grupo": "L", "local": "Croacia", "flagL": "🇭🇷", "visitante": "Ghana", "flagV": "🇬🇭", "fecha": "Jornada 3"}],
+        partidosGrupos: [
+            {"id": 1, "grupo": "A", "local": "México", "flagL": "🇲🇽", "visitante": "Sudáfrica", "flagV": "🇿🇦", "fecha": "Jornada 1"}, {"id": 2, "grupo": "A", "local": "Corea del Sur", "flagL": "🇰🇷", "visitante": "Chequia", "flagV": "🇨🇿", "fecha": "Jornada 1"}, {"id": 3, "grupo": "A", "local": "México", "flagL": "🇲🇽", "visitante": "Corea del Sur", "flagV": "🇰🇷", "fecha": "Jornada 2"}, {"id": 4, "grupo": "A", "local": "Chequia", "flagL": "🇨🇿", "visitante": "Sudáfrica", "flagV": "🇿🇦", "fecha": "Jornada 2"}, {"id": 5, "grupo": "A", "local": "Chequia", "flagL": "🇨🇿", "visitante": "México", "flagV": "🇲🇽", "fecha": "Jornada 3"}, {"id": 6, "grupo": "A", "local": "Sudáfrica", "flagL": "🇿🇦", "visitante": "Corea del Sur", "flagV": "🇰🇷", "fecha": "Jornada 3"}, 
+            {"id": 7, "grupo": "B", "local": "Canadá", "flagL": "🇨🇦", "visitante": "Bosnia y Herzegovina", "flagV": "🇧🇦", "fecha": "Jornada 1"}, {"id": 8, "grupo": "B", "local": "Qatar", "flagL": "🇶🇦", "visitante": "Suiza", "flagV": "🇨🇭", "fecha": "Jornada 1"}, {"id": 9, "grupo": "B", "local": "Canadá", "flagL": "🇨🇦", "visitante": "Qatar", "flagV": "🇶🇦", "fecha": "Jornada 2"}, {"id": 10, "grupo": "B", "local": "Suiza", "flagL": "🇨🇭", "visitante": "Bosnia y Herzegovina", "flagV": "🇧🇦", "fecha": "Jornada 2"}, {"id": 11, "grupo": "B", "local": "Suiza", "flagL": "🇨🇭", "visitante": "Canadá", "flagV": "🇨🇦", "fecha": "Jornada 3"}, {"id": 12, "grupo": "B", "local": "Bosnia y Herzegovina", "flagL": "🇧🇦", "visitante": "Qatar", "flagV": "🇶🇦", "fecha": "Jornada 3"}, 
+            {"id": 13, "grupo": "C", "local": "Brasil", "flagL": "🇧🇷", "visitante": "Marruecos", "flagV": "🇲🇦", "fecha": "Jornada 1"}, {"id": 14, "grupo": "C", "local": "Haití", "flagL": "🇭🇹", "visitante": "Escocia", "flagV": "🏴󠁧󠁢󠁳󠁣󠁴󠁿", "fecha": "Jornada 1"}, {"id": 15, "grupo": "C", "local": "Brasil", "flagL": "🇧🇷", "visitante": "Haití", "flagV": "🇭🇹", "fecha": "Jornada 2"}, {"id": 16, "grupo": "C", "local": "Escocia", "flagL": "🏴󠁧󠁢󠁳󠁣󠁴󠁿", "visitante": "Marruecos", "flagV": "🇲🇦", "fecha": "Jornada 2"}, {"id": 17, "grupo": "C", "local": "Escocia", "flagL": "🏴󠁧󠁢󠁳󠁣󠁴󠁿", "visitante": "Brasil", "flagV": "🇧🇷", "fecha": "Jornada 3"}, {"id": 18, "grupo": "C", "local": "Marruecos", "flagL": "🇲🇦", "visitante": "Haití", "flagV": "🇭🇹", "fecha": "Jornada 3"}, 
+            {"id": 19, "grupo": "D", "local": "Estados Unidos", "flagL": "🇺🇸", "visitante": "Paraguay", "flagV": "🇵🇾", "fecha": "Jornada 1"}, {"id": 20, "grupo": "D", "local": "Australia", "flagL": "🇦🇺", "visitante": "Turquía", "flagV": "🇹🇷", "fecha": "Jornada 1"}, {"id": 21, "grupo": "D", "local": "Estados Unidos", "flagL": "🇺🇸", "visitante": "Australia", "flagV": "🇦🇺", "fecha": "Jornada 2"}, {"id": 22, "grupo": "D", "local": "Turquía", "flagL": "🇹🇷", "visitante": "Paraguay", "flagV": "🇵🇾", "fecha": "Jornada 2"}, {"id": 23, "grupo": "D", "local": "Turquía", "flagL": "🇹🇷", "visitante": "Estados Unidos", "flagV": "🇺🇸", "fecha": "Jornada 3"}, {"id": 24, "grupo": "D", "local": "Paraguay", "flagL": "🇵🇾", "visitante": "Australia", "flagV": "🇦🇺", "fecha": "Jornada 3"}, 
+            {"id": 25, "grupo": "E", "local": "Alemania", "flagL": "🇩🇪", "visitante": "Curazao", "flagV": "🇨🇼", "fecha": "Jornada 1"}, {"id": 26, "grupo": "E", "local": "Costa de Marfil", "flagL": "🇨🇮", "visitante": "Ecuador", "flagV": "🇪🇨", "fecha": "Jornada 1"}, {"id": 27, "grupo": "E", "local": "Alemania", "flagL": "🇩🇪", "visitante": "Costa de Marfil", "flagV": "🇨🇮", "fecha": "Jornada 2"}, {"id": 28, "grupo": "E", "local": "Ecuador", "flagL": "🇪🇨", "visitante": "Curazao", "flagV": "🇨🇼", "fecha": "Jornada 2"}, {"id": 29, "grupo": "E", "local": "Ecuador", "flagL": "🇪🇨", "visitante": "Alemania", "flagV": "🇩🇪", "fecha": "Jornada 3"}, {"id": 30, "grupo": "E", "local": "Curazao", "flagL": "🇨🇼", "visitante": "Costa de Marfil", "flagV": "🇨🇮", "fecha": "Jornada 3"}, 
+            {"id": 31, "grupo": "F", "local": "Países Bajos", "flagL": "🇳🇱", "visitante": "Japón", "flagV": "🇯🇵", "fecha": "Jornada 1"}, {"id": 32, "grupo": "F", "local": "Suecia", "flagL": "🇸🇪", "visitante": "Túnez", "flagV": "🇹🇳", "fecha": "Jornada 1"}, {"id": 33, "grupo": "F", "local": "Países Bajos", "flagL": "🇳🇱", "visitante": "Suecia", "flagV": "🇸🇪", "fecha": "Jornada 2"}, {"id": 34, "grupo": "F", "local": "Túnez", "flagL": "🇹🇳", "visitante": "Japón", "flagV": "🇯🇵", "fecha": "Jornada 2"}, {"id": 35, "grupo": "F", "local": "Túnez", "flagL": "🇹🇳", "visitante": "Países Bajos", "flagV": "🇳🇱", "fecha": "Jornada 3"}, {"id": 36, "grupo": "F", "local": "Japón", "flagL": "🇯🇵", "visitante": "Suecia", "flagV": "🇸🇪", "fecha": "Jornada 3"}, 
+            {"id": 37, "grupo": "G", "local": "Bélgica", "flagL": "🇧🇪", "visitante": "Egipto", "flagV": "🇪🇬", "fecha": "Jornada 1"}, {"id": 38, "grupo": "G", "local": "Irán", "flagL": "🇮🇷", "visitante": "Nueva Zelanda", "flagV": "🇳🇿", "fecha": "Jornada 1"}, {"id": 39, "grupo": "G", "local": "Bélgica", "flagL": "🇧🇪", "visitante": "Irán", "flagV": "🇮🇷", "fecha": "Jornada 2"}, {"id": 40, "grupo": "G", "local": "Nueva Zelanda", "flagL": "🇳🇿", "visitante": "Egipto", "flagV": "🇪🇬", "fecha": "Jornada 2"}, {"id": 41, "grupo": "G", "local": "Nueva Zelanda", "flagL": "🇳🇿", "visitante": "Bélgica", "flagV": "🇧🇪", "fecha": "Jornada 3"}, {"id": 42, "grupo": "G", "local": "Egipto", "flagL": "🇪🇬", "visitante": "Irán", "flagV": "🇮🇷", "fecha": "Jornada 3"}, 
+            {"id": 43, "grupo": "H", "local": "España", "flagL": "🇪🇸", "visitante": "Cabo Verde", "flagV": "🇨🇻", "fecha": "Jornada 1"}, {"id": 44, "grupo": "H", "local": "Arabia Saudita", "flagL": "🇸🇦", "visitante": "Uruguay", "flagV": "🇺🇾", "fecha": "Jornada 1"}, {"id": 45, "grupo": "H", "local": "España", "flagL": "🇪🇸", "visitante": "Arabia Saudita", "flagV": "🇸🇦", "fecha": "Jornada 2"}, {"id": 46, "grupo": "H", "local": "Uruguay", "flagL": "🇺🇾", "visitante": "Cabo Verde", "flagV": "🇨🇻", "fecha": "Jornada 2"}, {"id": 47, "grupo": "H", "local": "Uruguay", "flagL": "🇺🇾", "visitante": "España", "flagV": "🇪🇸", "fecha": "Jornada 3"}, {"id": 48, "grupo": "H", "local": "Cabo Verde", "flagL": "🇨🇻", "visitante": "Arabia Saudita", "flagV": "🇸🇦", "fecha": "Jornada 3"}, 
+            {"id": 49, "grupo": "I", "local": "Francia", "flagL": "🇫🇷", "visitante": "Senegal", "flagV": "🇸🇳", "fecha": "Jornada 1"}, {"id": 50, "grupo": "I", "local": "Irak", "flagL": "🇮🇶", "visitante": "Noruega", "flagV": "🇳🇴", "fecha": "Jornada 1"}, {"id": 51, "grupo": "I", "local": "Francia", "flagL": "🇫🇷", "visitante": "Irak", "flagV": "🇮🇶", "fecha": "Jornada 2"}, {"id": 52, "grupo": "I", "local": "Noruega", "flagL": "🇳🇴", "visitante": "Senegal", "flagV": "🇸🇳", "fecha": "Jornada 2"}, {"id": 53, "grupo": "I", "local": "Noruega", "flagL": "🇳🇴", "visitante": "Francia", "flagV": "🇫🇷", "fecha": "Jornada 3"}, {"id": 54, "grupo": "I", "local": "Senegal", "flagL": "🇸🇳", "visitante": "Irak", "flagV": "🇮🇶", "fecha": "Jornada 3"}, 
+            {"id": 55, "grupo": "J", "local": "Argentina", "flagL": "🇦🇷", "visitante": "Argelia", "flagV": "🇩🇿", "fecha": "Jornada 1"}, {"id": 56, "grupo": "J", "local": "Austria", "flagL": "🇦🇹", "visitante": "Jordania", "flagV": "🇯🇴", "fecha": "Jornada 1"}, {"id": 57, "grupo": "J", "local": "Argentina", "flagL": "🇦🇷", "visitante": "Austria", "flagV": "🇦🇹", "fecha": "Jornada 2"}, {"id": 58, "grupo": "J", "local": "Jordania", "flagL": "🇯🇴", "visitante": "Argelia", "flagV": "🇩🇿", "fecha": "Jornada 2"}, {"id": 59, "grupo": "J", "local": "Jordania", "flagL": "🇯🇴", "visitante": "Argentina", "flagV": "🇦🇷", "fecha": "Jornada 3"}, {"id": 60, "grupo": "J", "local": "Argelia", "flagL": "🇩🇿", "visitante": "Austria", "flagV": "🇦🇹", "fecha": "Jornada 3"}, 
+            {"id": 61, "grupo": "K", "local": "Portugal", "flagL": "🇵🇹", "visitante": "RD Congo", "flagV": "🇨🇩", "fecha": "Jornada 1"}, {"id": 62, "grupo": "K", "local": "Uzbekistán", "flagL": "🇺🇿", "visitante": "Colombia", "flagV": "🇨🇴", "fecha": "Jornada 1"}, {"id": 63, "grupo": "K", "local": "Portugal", "flagL": "🇵🇹", "visitante": "Uzbekistán", "flagV": "🇺🇿", "fecha": "Jornada 2"}, {"id": 64, "grupo": "K", "local": "Colombia", "flagL": "🇨🇴", "visitante": "RD Congo", "flagV": "🇨🇩", "fecha": "Jornada 2"}, {"id": 65, "grupo": "K", "local": "Colombia", "flagL": "🇨🇴", "visitante": "Portugal", "flagV": "🇵🇹", "fecha": "Jornada 3"}, {"id": 66, "grupo": "K", "local": "RD Congo", "flagL": "🇨🇩", "visitante": "Uzbekistán", "flagV": "🇺🇿", "fecha": "Jornada 3"}, 
+            {"id": 67, "grupo": "L", "local": "Inglaterra", "flagL": "🇬🇧", "visitante": "Croacia", "flagV": "🇭🇷", "fecha": "Jornada 1"}, {"id": 68, "grupo": "L", "local": "Ghana", "flagL": "🇬🇭", "visitante": "Panamá", "flagV": "🇵🇦", "fecha": "Jornada 1"}, {"id": 69, "grupo": "L", "local": "Inglaterra", "flagL": "🇬🇧", "visitante": "Ghana", "flagV": "🇬🇭", "fecha": "Jornada 2"}, {"id": 70, "grupo": "L", "local": "Panamá", "flagL": "🇵🇦", "visitante": "Croacia", "flagV": "🇭🇷", "fecha": "Jornada 2"}, {"id": 71, "grupo": "L", "local": "Panamá", "flagL": "🇵🇦", "visitante": "Inglaterra", "flagV": "🇬🇧", "fecha": "Jornada 3"}, {"id": 72, "grupo": "L", "local": "Croacia", "flagL": "🇭🇷", "visitante": "Ghana", "flagV": "🇬🇭", "fecha": "Jornada 3"}
+        ],
         prediccionesUsuario: JSON.parse(localStorage.getItem('prode_datos')) || {}
     };
 
-    // ==========================================
-    // MOTOR DE AUDIO (Web Audio API & Temas)
-    // ==========================================
-    const AudioContext = window.AudioContext || window.webkitAudioContext;
-    let audioCtx;
-    let audioActivo = null;
-    let audioTimeout = null;
 
-    // Playlist de temas principales
+    // ==========================================
+    // 2. DIRECTOR DE AUDIO (BGM, THEMES Y SFX)
+    // ==========================================
     const playlist = ['audio-main_theme_1', 'audio-main_theme_2', 'audio-main_theme_3'];
     let currentTrackIndex = 0;
+    let audioCtx;
+    let bgTrack = null;
+    let activeTheme = null; // Para audios de países
 
     function initAudio() {
-    if (!audioCtx) audioCtx = new AudioContext();
-    if (audioCtx.state === 'suspended') audioCtx.resume();
-    
-    // Iniciar playlist en bucle
-    const firstTrack = document.getElementById(playlist[currentTrackIndex]);
-    firstTrack.play().catch(e => console.log("Esperando interacción para iniciar música"));
-    
-    // Listener para saltar a la siguiente canción
-    playlist.forEach(id => {
-        document.getElementById(id).onended = () => {
-            currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
-            document.getElementById(playlist[currentTrackIndex]).play();
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        playNextTrack();
+    }
+
+    function playNextTrack() {
+        if (bgTrack) {
+            bgTrack.onended = null;
+            bgTrack.pause();
+            bgTrack.currentTime = 0;
+        }
+        bgTrack = document.getElementById(playlist[currentTrackIndex]);
+        if (bgTrack) {
+            bgTrack.volume = 0.3; 
+            bgTrack.play().catch(e => console.log("Autoplay de BGM bloqueado"));
+            bgTrack.onended = () => {
+                currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
+                playNextTrack();
+            };
+        }
+    }
+
+    function reproducirAudioTema(pais) {
+        const audioIds = {
+            "Argentina": "audio-argentina", "Brasil": "audio-brasil", "Francia": "audio-francia", 
+            "Estados Unidos": "audio-usa", "España": "audio-espana", "Alemania": "audio-alemania", 
+            "Colombia": "audio-colombia", "Países Bajos": "audio-holanda", "Uruguay": "audio-uruguay",
+            "912": "audio-912", "rock": "audio-rock"
         };
-    });
-}
+        const themeId = audioIds[pais];
+        if (!themeId) return;
+
+        const themeAudio = document.getElementById(themeId);
+        if (!themeAudio) return;
+
+        // Si ya está sonando este mismo tema, no lo reiniciamos
+        if (!themeAudio.paused) return;
+
+        // Frenar otro tema de país si estuviera sonando
+        if (activeTheme && activeTheme !== themeAudio) {
+            activeTheme.pause();
+            activeTheme.currentTime = 0;
+        }
+
+        // Pausar música de fondo
+        if (bgTrack && !bgTrack.paused) bgTrack.pause();
+
+        activeTheme = themeAudio;
+        themeAudio.volume = 0.6;
+        themeAudio.currentTime = 0;
+        
+        themeAudio.play().then(() => {
+            // Cuando termine el tema del país, vuelve la música de fondo
+            themeAudio.onended = () => {
+                activeTheme = null;
+                if (bgTrack) bgTrack.play().catch(() => {});
+            };
+        }).catch(e => console.log("Audio de país bloqueado.", e));
+    }
+
+    function playSfx(id) {
+        const sfx = document.getElementById(id);
+        if (sfx) {
+            sfx.currentTime = 0;
+            sfx.volume = 0.8;
+            sfx.play().catch(e => {});
+        }
+    }
 
     let clickCount = 0; let clickTimer;
     function handleCoverClick() {
         clickCount++; clearTimeout(clickTimer);
         clickTimer = setTimeout(() => { clickCount = 0; }, 1500); 
         if (clickCount === 5) {
-            clickCount = 0;
+            clickCount = 0; 
             mostrarToast("¡Desbloqueaste el secreto de la foto grupal!", "var(--purple)");
-            document.body.style.backgroundColor = "white";
+            document.body.style.backgroundColor = "white"; 
             setTimeout(() => document.body.style.backgroundColor = "var(--bg-dark)", 100);
-            initAudio();
-            const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
-            osc.type = 'square';
+            
+            if (!audioCtx) initAudio();
+            const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain(); osc.type = 'square';
             osc.frequency.setValueAtTime(440, audioCtx.currentTime); osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.30); osc.frequency.setValueAtTime(1760, audioCtx.currentTime + 0.2);
             gain.gain.setValueAtTime(0.2, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.30);
-            osc.connect(gain); gain.connect(audioCtx.destination);
-            osc.start(); osc.stop(audioCtx.currentTime + 0.30);
+            osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + 0.30);
         }
     }
 
     function playHoverSound(nombreJugador, esUltimo) {
         if (currentUser && nombreJugador !== currentUser.username) {
-            initAudio();
+            if (!audioCtx) initAudio();
             const osc = audioCtx.createOscillator(); const gainNode = audioCtx.createGain();
             if (esUltimo) {
-                osc.type = 'sawtooth';
-                osc.frequency.setValueAtTime(200, audioCtx.currentTime); osc.frequency.linearRampToValueAtTime(100, audioCtx.currentTime + 0.4); 
+                osc.type = 'sawtooth'; osc.frequency.setValueAtTime(200, audioCtx.currentTime); osc.frequency.linearRampToValueAtTime(100, audioCtx.currentTime + 0.4); 
                 gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime); gainNode.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.4); 
-                osc.connect(gainNode); gainNode.connect(audioCtx.destination);
-                osc.start(); osc.stop(audioCtx.currentTime + 0.4);
+                osc.connect(gainNode); gainNode.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + 0.4);
             } else {
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(350, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(700, audioCtx.currentTime + 0.08); 
+                osc.type = 'sine'; osc.frequency.setValueAtTime(350, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(700, audioCtx.currentTime + 0.08); 
                 gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime); gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.08); 
-                osc.connect(gainNode); gainNode.connect(audioCtx.destination);
-                osc.start(); osc.stop(audioCtx.currentTime + 0.1);
+                osc.connect(gainNode); gainNode.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + 0.1);
             }
         }
     }
 
-    // Función centralizada para temas de país (NO se reinicia si ya suena)
-function reproducirAudioTema(pais) {
-    const audioIds = {
-        "Argentina": "audio-argentina", "Brasil": "audio-brasil", "Francia": "audio-francia", 
-        "Estados Unidos": "audio-usa", "España": "audio-espana", "Alemania": "audio-alemania", 
-        "Colombia": "audio-colombia", "Países Bajos": "audio-holanda", "Uruguay": "audio-uruguay"
-        };
-        const reproductor = document.getElementById(audioIds[pais]);
-    if (!reproductor) return;
-
-    // Solo suena si NO está sonando ya
-    if (reproductor.paused) {
-        const bgTrack = document.getElementById(playlist[currentTrackIndex]);
-        if (bgTrack && !bgTrack.paused) bgTrack.pause();
-
-        reproductor.volume = 0.6;
-        reproductor.currentTime = 0;
-        reproductor.play().then(() => {
-            // Cortar a los 10 segundos si sigue sonando
-            const temaTimer = setTimeout(() => {
-                if (!reproductor.paused) {
-                    reproductor.pause();
-                    reproductor.currentTime = 0;
-                }
-                if (bgTrack) bgTrack.play().catch(() => {});
-            }, 10000);
-
-            reproductor.onended = () => {
-                clearTimeout(temaTimer);
-                if (bgTrack) bgTrack.play().catch(() => {}); // Vuelve al theme
-            };
-        }).catch(() => {});
-    }
-}
-
-
-    // Sonido para trucos y trampa (max 5 seg, pausa el tema de fondo mientras suena)
-    function playSfx(id) {
-        const sfx = document.getElementById(id);
-        const bgTrack = document.getElementById(playlist[currentTrackIndex]);
-
-        // Pausar tema de fondo
-        if (bgTrack && !bgTrack.paused) bgTrack.pause();
-
-        sfx.currentTime = 0;
-        sfx.play();
-
-        // Cortar a los 5 segundos si sigue sonando
-        const sfxTimer = setTimeout(() => {
-            if (!sfx.paused) {
-                sfx.pause();
-                sfx.currentTime = 0;
-            }
-            if (bgTrack) bgTrack.play().catch(() => {});
-        }, 5000);
-
-        // Al terminar antes de los 5 seg, retomar el tema de fondo
-        sfx.onended = () => {
-            clearTimeout(sfxTimer);
-            if (bgTrack) bgTrack.play().catch(() => {});
-        };
-    }
-
 
     // ==========================================
-    // LOBBY Y LOGIN
+    // 3. LOBBY Y LOGIN (UI INIT)
     // ==========================================
     window.addEventListener('DOMContentLoaded', () => { 
         document.getElementById('preview-piece').src = selectedPiece; 
         document.getElementById('preview-piece').style.display = 'block'; 
+        
+        // Poblar podios
+        const equiposUnicos = [...new Set(db.partidosGrupos.map(p => p.local).concat(db.partidosGrupos.map(p => p.visitante)))].sort();
+        const selectsPodio = ['select-campeon', 'select-subcampeon', 'select-tercero'];
+        
+        selectsPodio.forEach(id => {
+            const select = document.getElementById(id);
+            equiposUnicos.forEach(eq => {
+                const opt = document.createElement('option');
+                opt.value = eq; opt.text = eq;
+                select.appendChild(opt);
+            });
+        });
     });
 
     function selectPiece(pieceFileName, element) { 
         document.querySelectorAll('.piece-option').forEach(el => el.classList.remove('selected')); 
         element.classList.add('selected'); selectedPiece = pieceFileName; 
-        document.getElementById('preview-piece').src = pieceFileName; 
-        document.getElementById('preview-piece').style.display = 'block'; 
+        document.getElementById('preview-piece').src = pieceFileName; document.getElementById('preview-piece').style.display = 'block'; 
     }
 
     function updateHeadPreview() { 
-        const name = document.getElementById('select-name').value; 
-        const headImgName = headsDatabase[name]; 
+        const name = document.getElementById('select-name').value; const headImgName = headsDatabase[name]; 
         const preview = document.getElementById('preview-head'); 
         preview.src = headImgName || ''; preview.style.display = headImgName ? 'block' : 'none'; 
     }
 
     function registerAndEnter() { 
         const name = document.getElementById('select-name').value; 
+        const campeon = document.getElementById('select-campeon').value;
+        const subcampeon = document.getElementById('select-subcampeon').value;
+        const tercero = document.getElementById('select-tercero').value;
+
         if (!name) return alert("Por favor, seleccioná quién sos primero."); 
-        const userProfile = { username: name, head: headsDatabase[name] || 'cabeza_default.png', piece: selectedPiece }; 
+        if (!campeon || !subcampeon || !tercero) return alert("Por favor, completá los 3 puestos del podio mundial.");
+        if (campeon === subcampeon || campeon === tercero || subcampeon === tercero) return alert("¡No podés elegir a la misma selección en dos puestos distintos del podio!");
+
+        const podio = { campeon: campeon, subcampeon: subcampeon, tercero: tercero };
+        const userProfile = { username: name, head: headsDatabase[name] || 'cabeza_default.png', piece: selectedPiece, podio: podio }; 
+        
         localStorage.setItem('prode_user_profile', JSON.stringify(userProfile)); 
-        initAudio(); initApp(userProfile); 
+        
+        // Iniciar BGM loop al clickear el primer botón
+        initAudio(); 
+        
+        fetch(API_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ accion: "guardar_podio", jugador: name, podio: podio }) });
+        
+        initApp(userProfile); 
     }
 
     window.onload = function() { 
@@ -505,47 +468,37 @@ function reproducirAudioTema(pais) {
         currentUser = profile; 
         document.getElementById('screen-login').classList.remove('active'); 
         document.getElementById('screen-app').classList.add('active');
-        document.getElementById('header-name').innerText = currentUser.username;
-
-        const headerHead = document.getElementById('header-head');
-        const headerPiece = document.getElementById('header-piece');
-        headerHead.src = currentUser.head;
-        headerHead.style.display = 'block';
-        headerPiece.src = currentUser.piece;
-        headerPiece.style.display = 'block';
+        document.getElementById('header-name').innerText = currentUser.username; 
         
-        // Habilita panel dev si te llamas Emmanuel (como medida extra de admin)
-        // Se aplica al renderizar la pestaña de Reglas, donde el panel existe en el DOM
+        const hdHead = document.getElementById('header-head');
+        const hdPiece = document.getElementById('header-piece');
+        hdHead.src = currentUser.head; hdHead.style.display = 'block';
+        hdPiece.src = currentUser.piece; hdPiece.style.display = 'block';
         
         renderFaseGrupos();
     }
 
 
     // ==========================================
-    // RENDERIZADO DE LA APLICACIÓN
+    // 4. RENDERIZADO PRINCIPAL (TABS)
     // ==========================================
     const contentDiv = document.getElementById('app-content');
 
     function switchTab(tab, btn) { 
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active')); 
-        btn.classList.add('active'); 
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); 
         if (tab === 'grupos') renderFaseGrupos(); 
         if (tab === 'posiciones') renderPosiciones(); 
         if (tab === 'reglas') renderReglas(); 
-        
-        // Toggle de visualización del botón flotante (solo en partidos)
         document.getElementById('btn-walicho').style.display = (tab === 'grupos') ? 'flex' : 'none';
     }
 
     function renderFaseGrupos(grupoFiltro = 'A') {
         let html = `<div class="filter-group"><select id="groupSelect" onchange="renderFaseGrupos(this.value)">${db.grupos.map(g => `<option value="${g}" ${g === grupoFiltro ? 'selected' : ''}>Filtrar: Grupo ${g}</option>`).join('')}</select></div><div id="matches-container">`;
-        
         const partidos = db.partidosGrupos.filter(p => p.grupo === grupoFiltro);
         
         partidos.forEach(p => {
             const predL = db.prediccionesUsuario[`${p.id}_L`] !== undefined ? db.prediccionesUsuario[`${p.id}_L`] : '';
             const predV = db.prediccionesUsuario[`${p.id}_V`] !== undefined ? db.prediccionesUsuario[`${p.id}_V`] : '';
-            
             let disableInput = (walichoSufrido && walichoSufrido.tipo === 'bloqueo' && walichoSufrido.partidoId == p.id) ? 'disabled' : '';
             let lockStyle = disableInput ? 'background-color: #334155; cursor: not-allowed;' : '';
 
@@ -568,7 +521,7 @@ function reproducirAudioTema(pais) {
             </div>`;
         });
 
-        // TRAMPA CHILE AL FINAL
+        // Trampa Chile
         html += `
         <div class="match-card" style="border-color: rgba(239, 68, 68, 0.5); background: linear-gradient(145deg, var(--bg-card), rgba(239, 68, 68, 0.05)); margin-top: 30px;">
             <div class="match-header"><span style="color: var(--danger); font-weight:bold;">Partido Especial • Repechaje</span><span>⚽ Partido #999</span></div>
@@ -597,24 +550,13 @@ function reproducirAudioTema(pais) {
                 data.forEach((jugador, index) => {
                     let claseOro = jugador.posicion === 1 ? 'class="pos-1"' : '';
                     let headImg = headsDatabase[jugador.jugador] || 'cabeza_default.png';
-                    // Si es el usuario actual, usamos su pieza local (más confiable que la de la API)
-                    let pieceImg = (currentUser && jugador.jugador === currentUser.username)
-                        ? currentUser.piece
-                        : (jugador.piece || 'pieza_auto.png');
+                    let pieceImg = (currentUser && jugador.jugador === currentUser.username) ? currentUser.piece : (jugador.piece || 'pieza_auto.png');
                     let hoverEffectClass = (currentUser && jugador.jugador !== currentUser.username) ? 'hover-effect' : '';
                     let esUltimo = (index === totalJugadores - 1 && jugador.puntos === data[totalJugadores-1].puntos);
                     filas += `
                         <tr class="leaderboard-row ${hoverEffectClass}" onmouseenter="playHoverSound('${jugador.jugador}', ${esUltimo})">
                             <td ${claseOro}>${jugador.posicion}</td>
-                            <td ${claseOro} style="text-align: left;">
-                                <div class="leaderboard-user">
-                                    <div class="leaderboard-avatar">
-                                        <img class="leaderboard-head" src="${headImg}" alt="cabeza" style="display:block;" onerror="this.style.display='none'">
-                                        <img class="leaderboard-piece" src="${pieceImg}" alt="pieza" style="display:block;" onerror="this.style.display='none'">
-                                    </div>
-                                    <span>${jugador.jugador}</span>
-                                </div>
-                            </td>
+                            <td ${claseOro} style="text-align: left;"><div class="leaderboard-user"><div class="leaderboard-avatar"><img class="leaderboard-head" src="${headImg}" alt="cabeza" style="display:block;" onerror="this.style.display='none'"><img class="leaderboard-piece" src="${pieceImg}" alt="pieza" style="display:block;" onerror="this.style.display='none'"></div><span>${jugador.jugador}</span></div></td>
                             <td ${claseOro}>${jugador.puntos}</td><td>${jugador.plenos}</td>
                         </tr>`;
                 });
@@ -652,8 +594,8 @@ function reproducirAudioTema(pais) {
             <hr style="border-color:#555; margin:10px 0;">
             <button class="dev-btn" onclick="simularMadrugada()">Simular Reloj 3:00 AM</button>
         </div>`; 
-        // Mostrar panel admin si corresponde
-        if (currentUser && currentUser.username === "Emmanuel") {
+        
+        if (currentUser && currentUser.username === "Emma") {
             const adminPanel = document.getElementById('panel-admin');
             if (adminPanel) adminPanel.style.display = 'block';
         }
@@ -661,37 +603,21 @@ function reproducirAudioTema(pais) {
 
 
     // ==========================================
-    // LÓGICA DE JUEGO Y GAMIFICACIÓN
+    // 5. LÓGICA DE JUEGO (GAMIFICACIÓN Y TRAMPAS)
     // ==========================================
     function savePred(id, type, inputEl) {
-    let val = parseInt(inputEl.value);
-    if (isNaN(val)) return;
+        let val = parseInt(inputEl.value);
+        if (isNaN(val)) return;
 
-    const partido = db.partidosGrupos.find(p => p.id == id);
-    const paisesMusicales = ["Argentina", "Brasil", "Francia", "Estados Unidos", "España", "Alemania", "Colombia", "Países Bajos", "Uruguay"];
-
-    // Audio temático: solo se dispara la PRIMERA vez que se toca este partido
-    const yaTocoEstePartido = db.prediccionesUsuario[`${id}_L`] !== undefined || db.prediccionesUsuario[`${id}_V`] !== undefined;
-    if (!yaTocoEstePartido && partido) {
-        const paisConAudio = paisesMusicales.find(p => p === partido.local || p === partido.visitante);
-        if (paisConAudio) {
-            reproducirAudioTema(paisConAudio);
-        } else {
-            // País sin audio: "¿Estás seguro?" de forma muy aleatoria (8% de probabilidad)
-            if (Math.random() < 0.08) playSfx('audio-estas_seguro');
+        const partido = db.partidosGrupos.find(p => p.id == id);
+        
+        // SFX Equipos Débiles
+        const debiles = ["Curazao", "Haití", "Jordania", "Panamá", "Argelia", "RD Congo", "Sudáfrica", "Cabo Verde"];
+        if (partido && (debiles.includes(partido.local) || debiles.includes(partido.visitante))) {
+            playSfx('audio-estas_seguro');
         }
-    }
 
-    // Easter Egg: países débiles — también muy aleatorio (10%)
-    const debiles = ["Curazao", "Haití", "Jordania", "Panamá", "Argelia", "RD Congo"];
-    if (partido && (debiles.includes(partido.local) || debiles.includes(partido.visitante))) {
-        if (Math.random() < 0.10) playSfx('audio-estas_seguro');
-    }
-
-    // Lógica original de Walichos... (mantiene tu código anterior aquí)
-    db.prediccionesUsuario[`${id}_${type}`] = val;
-
-        // 1. Walichos Activos
+        // Walicho Local
         if (walichoSufrido) {
             if (walichoSufrido.tipo === 'pares' && val % 2 !== 0) { val++; mostrarToast("🍄 ¡Walicho de un Rival! Tus resultados se corrigen a PARES.", "var(--walicho)"); }
             if (walichoSufrido.tipo === 'impares' && val % 2 === 0) { val++; mostrarToast("🍄 ¡Walicho de un Rival! Tus resultados se corrigen a IMPARES.", "var(--walicho)"); }
@@ -699,11 +625,19 @@ function reproducirAudioTema(pais) {
             inputEl.value = val;
         }
 
+        // Guardado Local
         db.prediccionesUsuario[`${id}_${type}`] = val; 
         let localInput = db.prediccionesUsuario[`${id}_L`];
         let awayInput = db.prediccionesUsuario[`${id}_V`];
         
-        // 3. Easter Eggs
+        // Audio Theme
+        if (partido) {
+            let paisesMusicales = ["Argentina", "Brasil", "Francia", "Estados Unidos", "España", "Alemania", "Colombia", "Países Bajos", "Uruguay"];
+            let paisEncontrado = paisesMusicales.find(p => p === partido.local || p === partido.visitante);
+            if (paisEncontrado) reproducirAudioTema(paisEncontrado);
+        }
+
+        // Easter Eggs Numéricos
         if (val == 7) mostrarToast("¿7 goles? Demasiado cine, intentá con algo más realista. 🇧🇷", "var(--danger)");
         else if ((localInput == 3 && awayInput == 1) || (localInput == 1 && awayInput == 3)) mostrarToast("Y va el tercero... y va el tercero... 🐔", "var(--gold)");
         else if ((localInput == 9 && awayInput == 12) || (localInput == 12 && awayInput == 9)) {
@@ -714,11 +648,11 @@ function reproducirAudioTema(pais) {
     }
 
     function bromaChile(el) {
+        playSfx('audio-trampa');
         if(el.tagName === 'INPUT') el.value = '';
         mostrarToast("jajajajajaj mentira... ¡Si lo miran por TV! 📺", "var(--danger)");
     }
 
-    // Habilidades Activas
     function activarDados(matchId) { 
         playSfx('audio-trampa');
         let es20Natural = Math.random() < 0.1; 
@@ -731,6 +665,7 @@ function reproducirAudioTema(pais) {
     }
 
     function pedirVAR(matchId) {
+        playSfx('audio-trampa');
         if (varCharges <= 0) return mostrarToast("📺 Se te agotó el crédito del VAR.", "var(--danger)");
         let objetivo = prompt("📺 SALA DEL VAR\n\n¿La predicción de qué jugador querés espiar para este partido?");
         if (objetivo) {
@@ -753,9 +688,9 @@ function reproducirAudioTema(pais) {
         }
     }
 
-    // Modo Dios (Testing Walichos localmente)
+    // Modo Dios Admin
     function simularWalicho(tipo) {
-        new (window.AudioContext || window.webkitAudioContext)().resume(); // Destraba audio
+        if (!audioCtx) initAudio();
         if (!tipo) { walichoSufrido = null; mostrarToast("✨ Limpiaste tu aura. Ya no tenés Walichos.", "var(--text-muted)"); } 
         else { walichoSufrido = { tipo: tipo, partidoId: 1 }; mostrarToast(`Te acaban de tirar un Walicho: ${tipo.toUpperCase()}`, "var(--walicho)"); }
         renderFaseGrupos(document.getElementById('groupSelect') ? document.getElementById('groupSelect').value : 'A');

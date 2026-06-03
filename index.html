@@ -295,7 +295,7 @@
     let currentTrackIndex = 0;
     let audioCtx;
     let bgTrack = null;
-    let activeTheme = null; // Para audios de países
+    let activeTheme = null; 
 
     function initAudio() {
         if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -322,7 +322,7 @@
 
     function reproducirAudioTema(pais) {
         const audioIds = {
-            "Argentina": "audio-argentina", "Brasil": "audio-brasil", "Francia": "audio-francia", "Mexico": "audio-mexico"
+            "Argentina": "audio-argentina", "Brasil": "audio-brasil", "Francia": "audio-francia", "México": "audio-mexico",
             "Estados Unidos": "audio-usa", "España": "audio-espana", "Alemania": "audio-alemania", 
             "Colombia": "audio-colombia", "Países Bajos": "audio-holanda", "Uruguay": "audio-uruguay",
             "912": "audio-912", "rock": "audio-rock"
@@ -333,16 +333,13 @@
         const themeAudio = document.getElementById(themeId);
         if (!themeAudio) return;
 
-        // Si ya está sonando este mismo tema, no lo reiniciamos
         if (!themeAudio.paused) return;
 
-        // Frenar otro tema de país si estuviera sonando
         if (activeTheme && activeTheme !== themeAudio) {
             activeTheme.pause();
             activeTheme.currentTime = 0;
         }
 
-        // Pausar música de fondo
         if (bgTrack && !bgTrack.paused) bgTrack.pause();
 
         activeTheme = themeAudio;
@@ -350,20 +347,40 @@
         themeAudio.currentTime = 0;
         
         themeAudio.play().then(() => {
-            // Cuando termine el tema del país, vuelve la música de fondo
+            // Límite de 45 segundos para el tema del país
+            let themeTimer = setTimeout(() => {
+                if (!themeAudio.paused) {
+                    themeAudio.pause();
+                    themeAudio.currentTime = 0;
+                    activeTheme = null;
+                    if (bgTrack) bgTrack.play().catch(() => {});
+                }
+            }, 45000);
+
             themeAudio.onended = () => {
+                clearTimeout(themeTimer);
                 activeTheme = null;
                 if (bgTrack) bgTrack.play().catch(() => {});
             };
         }).catch(e => console.log("Audio de país bloqueado.", e));
     }
 
-    function playSfx(id) {
+    // Acepta un límite de duración en milisegundos (ej: 6000 para 6 segs)
+    function playSfx(id, maxDurationMs = null) {
         const sfx = document.getElementById(id);
         if (sfx) {
             sfx.currentTime = 0;
             sfx.volume = 0.6;
             sfx.play().catch(e => {});
+            
+            if (maxDurationMs) {
+                setTimeout(() => {
+                    if (!sfx.paused) {
+                        sfx.pause();
+                        sfx.currentTime = 0;
+                    }
+                }, maxDurationMs);
+            }
         }
     }
 
@@ -450,11 +467,8 @@
         
         localStorage.setItem('prode_user_profile', JSON.stringify(userProfile)); 
         
-        // Iniciar BGM loop al clickear el primer botón
         initAudio(); 
-        
         fetch(API_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ accion: "guardar_podio", jugador: name, podio: podio }) });
-        
         initApp(userProfile); 
     }
 
@@ -522,7 +536,7 @@
             </div>`;
         });
 
-        // Trampa Chile
+        // Trampa Chile (Sin audio trampa)
         html += `
         <div class="match-card" style="border-color: rgba(239, 68, 68, 0.5); background: linear-gradient(145deg, var(--bg-card), rgba(239, 68, 68, 0.05)); margin-top: 30px;">
             <div class="match-header"><span style="color: var(--danger); font-weight:bold;">Partido Especial • Repechaje</span><span>⚽ Partido #999</span></div>
@@ -547,6 +561,18 @@
             let filas = '';
             if(data.length === 0) filas = `<tr><td colspan="4" style="color:var(--text-muted);">Aún no hay puntos calculados</td></tr>`;
             else {
+                // ORDENAR POR PUNTOS (De mayor a menor)
+                data.sort((a, b) => b.puntos - a.puntos);
+                
+                // Recalcular posiciones después de ordenar
+                let currentRank = 1;
+                data.forEach((jugador, index) => {
+                    if (index > 0 && jugador.puntos < data[index - 1].puntos) {
+                        currentRank = index + 1;
+                    }
+                    jugador.posicion = currentRank;
+                });
+
                 let totalJugadores = data.length;
                 data.forEach((jugador, index) => {
                     let claseOro = jugador.posicion === 1 ? 'class="pos-1"' : '';
@@ -575,12 +601,12 @@
                 <li><strong>2. Efecto Bola de Nieve:</strong> +3 pts extra si acertás algo en TODOS los partidos del grupo.</li>
                 <li><strong>3. Valla Invicta:</strong> +1 pt extra si predecís que un equipo termina en 0.</li>
                 <li><strong>4. El Batacazo:</strong> +2 pts si predecís que una potencia pierde y sucede.</li>
+                <li><strong>5. Podio Final:</strong> Puntos sumados al final del torneo (+15 Campeón, +8 Subcampeón, +4 Tercero).</li>
             </ul>
             <h3 style="color:var(--purple); margin-bottom:15px; margin-top:30px;">Habilidades (Gamificación)</h3>
             <ul class="rules-list">
-                <li><strong>5. Comprar Dados 🎲 (Activa):</strong> Una vez cada 5 días podés destrabar la edición de un partido ya empezado.</li>
-                <li><strong>6. El Underdog (Pasiva):</strong> El que vaya último multiplica x2 lo que gane ese día.</li>
-                <li><strong>7. Campeón de Invierno:</strong> Premio especial al que lidere tras terminar la fase de grupos.</li>
+                <li><strong>6. Comprar Dados 🎲 (Activa):</strong> Destraba la edición de un partido que ya empezó (válido hasta 60 min iniciado el juego). Uso: 1 vez cada 5 días.</li>
+                <li><strong>7. El Underdog (Pasiva):</strong> El que vaya último multiplica x2 lo que gane ese día.</li>
                 <li><strong>8. VAR y Walichos 📺🍄:</strong> Tenés 3 usos de VAR en el torneo. Además, una vez por semana podés tirarle un Walicho a un rival para sabotearlo.</li>
             </ul>
         </div>
@@ -612,9 +638,11 @@
 
         const partido = db.partidosGrupos.find(p => p.id == id);
         
-        // SFX Equipos Débiles
+        // SFX Equipos Débiles (Se activa SOLO si le ponés 1 gol o más al equipo débil directamente)
+        const equipoModificado = type === 'L' ? partido?.local : partido?.visitante;
         const debiles = ["Curazao", "Haití", "Jordania", "Panamá", "Argelia", "RD Congo", "Sudáfrica", "Cabo Verde"];
-        if (partido && (debiles.includes(partido.local) || debiles.includes(partido.visitante))) {
+        
+        if (partido && debiles.includes(equipoModificado) && val > 0) {
             playSfx('audio-estas_seguro');
         }
 
@@ -633,7 +661,7 @@
         
         // Audio Theme
         if (partido) {
-            let paisesMusicales = ["Argentina", "Brasil", "Francia", "Estados Unidos", "España", "Alemania", "Colombia", "Países Bajos", "Uruguay"];
+            let paisesMusicales = ["Argentina", "Brasil", "Francia", "Estados Unidos", "España", "Alemania", "Colombia", "Países Bajos", "Uruguay", "México"];
             let paisEncontrado = paisesMusicales.find(p => p === partido.local || p === partido.visitante);
             if (paisEncontrado) reproducirAudioTema(paisEncontrado);
         }
@@ -649,13 +677,12 @@
     }
 
     function bromaChile(el) {
-        playSfx('audio-trampa');
         if(el.tagName === 'INPUT') el.value = '';
         mostrarToast("jajajajajaj mentira... ¡Si lo miran por TV! 📺", "var(--danger)");
     }
 
     function activarDados(matchId) { 
-        playSfx('audio-trampa');
+        playSfx('audio-trampa', 6000);
         let es20Natural = Math.random() < 0.1; 
         if (es20Natural) { mostrarToast("🎲 ¡Tiraste un 20 natural! El Master te aprueba el cambio de una.", "var(--gold)"); } 
         else { mostrarToast("⏳ Enviando petición a los dioses...", "#a855f7"); } 
@@ -666,7 +693,7 @@
     }
 
     function pedirVAR(matchId) {
-        playSfx('audio-trampa');
+        playSfx('audio-trampa', 6000);
         if (varCharges <= 0) return mostrarToast("📺 Se te agotó el crédito del VAR.", "var(--danger)");
         let objetivo = prompt("📺 SALA DEL VAR\n\n¿La predicción de qué jugador querés espiar para este partido?");
         if (objetivo) {
@@ -677,7 +704,7 @@
     }
 
     function abrirMenuWalicho() {
-        playSfx('audio-trampa');
+        playSfx('audio-trampa', 6000);
         if (walichoSemanalUsado) return mostrarToast("🍄 Ya usaste tu Walicho esta semana. Dejá jugar en paz.", "var(--danger)");
         let victima = prompt("🍄 MENÚ DE WALICHOS 🍄\n\n¿A quién le querés arruinar la fecha? (Ej: Valentina)");
         if (!victima) return;

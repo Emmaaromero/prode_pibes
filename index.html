@@ -123,11 +123,12 @@
 <audio id="audio-brasil" src="magalenha.mp3" preload="auto"></audio>
 <audio id="audio-francia" src="francia.mp3" preload="auto"></audio>
 <audio id="audio-usa" src="usa.mp3" preload="auto"></audio>
-<audio id="audio-espana" src="espana.mp3" preload="auto"></audio>
+<audio id="audio-espana" src="españa.mp3" preload="auto"></audio>
 <audio id="audio-alemania" src="alemania.mp3" preload="auto"></audio>
 <audio id="audio-colombia" src="colombia.mp3" preload="auto"></audio>
 <audio id="audio-holanda" src="holanda.mp3" preload="auto"></audio>
 <audio id="audio-uruguay" src="uruguay.ogg" preload="auto"></audio>
+<audio id="audio-mexico" src="mexico.mp3" preload="auto"></audio>
 
 <audio id="audio-rock" src="rock.mp3" preload="auto"></audio>
 <audio id="audio-912" src="912.mp3" preload="auto"></audio>
@@ -321,7 +322,7 @@
 
     function reproducirAudioTema(pais) {
         const audioIds = {
-            "Argentina": "audio-argentina", "Brasil": "audio-brasil", "Francia": "audio-francia", 
+            "Argentina": "audio-argentina", "Brasil": "audio-brasil", "Francia": "audio-francia", "Mexico": "audio-mexico"
             "Estados Unidos": "audio-usa", "España": "audio-espana", "Alemania": "audio-alemania", 
             "Colombia": "audio-colombia", "Países Bajos": "audio-holanda", "Uruguay": "audio-uruguay",
             "912": "audio-912", "rock": "audio-rock"
@@ -345,7 +346,7 @@
         if (bgTrack && !bgTrack.paused) bgTrack.pause();
 
         activeTheme = themeAudio;
-        themeAudio.volume = 0.6;
+        themeAudio.volume = 0.5;
         themeAudio.currentTime = 0;
         
         themeAudio.play().then(() => {
@@ -361,7 +362,7 @@
         const sfx = document.getElementById(id);
         if (sfx) {
             sfx.currentTime = 0;
-            sfx.volume = 0.8;
+            sfx.volume = 0.6;
             sfx.play().catch(e => {});
         }
     }

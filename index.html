@@ -254,20 +254,20 @@
     // ==========================================
     // 1. CONFIGURACIÓN Y BASE DE DATOS
     // ==========================================
-    const API_URL = "https://script.google.com/macros/s/AKfycbyucMYDyFU6xQmUQvAk_e6kp0lcUGux6-RB8rKJRnIi4aZb0nMSZ6q60Erpl3cjHsg/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbyIXDv2tMQ62pg-yTk5RpfurvCKEtnGDXSvizVTQyFUWL3LvBb0ItiA0jh-bDIpQqQ/exec";
 
     const headsDatabase = {
         "Emma": "caricatura_emma.png", "Tomi": "caricatura_tomi.png", "Facu": "caricatura_facu.png",
         "Tano": "caricatura_tano.png", "Rodri": "caricatura_rodri.png", "Mono": "caricatura_mono.png",
         "Blangi": "caricatura_blangi.png", "FAK": "caricatura_fak.png", "Kiki": "caricatura_kiki.png",
-        "Maxi": "caricatura_max.png"
+        "Maxi": "caricartura_max.png"
     };
 
     let selectedPiece = "pieza_auto.png"; 
     let currentUser = null;
     let varCharges = 3; let walichoSemanalUsado = false; let esMadrugadaSimulada = false;
     
-    // NUEVO: Array para guardar las maldiciones recibidas desde el servidor
+    // Array para guardar las maldiciones recibidas desde el servidor
     let misWalichosSufridos = [];
 
     // Fixture Oficial (72 Partidos)
@@ -631,10 +631,26 @@
             <h3 style="color:var(--purple); margin-bottom:15px; margin-top:30px;">Habilidades (Gamificación)</h3>
             <ul class="rules-list">
                 <li><strong>6. Comprar Dados 🎲 (Activa):</strong> Destraba la edición de un partido que ya empezó (válido hasta 60 min iniciado el juego). Uso: 1 vez cada 5 días.</li>
-                <li><strong>7. El Underdog (Pasiva):</strong> El que vaya último multiplica x2 lo que gane ese día.</li>
-                <li><strong>8. VAR y Walichos 📺🍄:</strong> Tenés 3 usos de VAR en el torneo. Además, una vez por semana podés tirarle un Walicho a un rival para sabotearlo.</li>
+                <li><strong>7. El Underdog (Pasiva):</strong> Si vas último en la tabla general, tus aciertos valen DOBLE (x2). ⚠️ <em>Requisito vital:</em> No se premia el abandono. Para que el multiplicador te haga efecto, el sistema verifica que tengas cargados y completos tus pronósticos de los últimos 2 días de competencia.</li>
+                <li><strong>8. VAR y Walichos 📺🍄:</strong> Tenés 3 usos de VAR en todo el torneo para espiar a otros. Además, <strong>una vez cada 3 días</strong> podés tirarle un Walicho (maldición) a un rival para arruinarle la fecha (Forzar Pares, Impares, Multiplicar x2, o bloquearle la celda con Candado).</li>
             </ul>
+        </div>
+        
+        <div class="dev-panel" id="panel-admin" style="display:none;">
+            <h4>🧪 Panel de Admin (Modo Dios)</h4>
+            <p style="margin-bottom:10px; color:var(--text-muted);">Simulá que te cayó una trampa o cambiá la hora para probar los secretos.</p>
+            <button class="dev-btn" onclick="simularWalicho('pares')">Walicho: Pares</button>
+            <button class="dev-btn" onclick="simularWalicho('impares')">Walicho: Impares</button>
+            <button class="dev-btn" onclick="simularWalicho('x2')">Walicho: x2</button>
+            <button class="dev-btn" onclick="simularWalicho(null)">Limpiar Walicho</button>
+            <hr style="border-color:#555; margin:10px 0;">
+            <button class="dev-btn" onclick="simularMadrugada()">Simular Reloj 3:00 AM</button>
         </div>`; 
+        
+        if (currentUser && currentUser.username === "Emma") {
+            const adminPanel = document.getElementById('panel-admin');
+            if (adminPanel) adminPanel.style.display = 'block';
+        }
     }
 
 
@@ -715,7 +731,7 @@
 
     function abrirMenuWalicho() {
         playSfx('audio-trampa', 6000);
-        if (walichoSemanalUsado) return mostrarToast("🍄 Ya usaste tu Walicho esta semana. Dejá jugar en paz.", "var(--danger)");
+        if (walichoSemanalUsado) return mostrarToast("🍄 Ya usaste tu Walicho. Acordate que podés tirar uno nuevo cada 3 días.", "var(--danger)");
         
         let victima = prompt("🍄 MENÚ DE WALICHOS 🍄\n\n¿A quién le querés arruinar la fecha? (Ej: Tomi, Facu, etc)");
         if (!victima || victima === currentUser.username) return;
@@ -747,6 +763,14 @@
             document.getElementById('btn-walicho').classList.add('usado');
             mostrarToast(`🍄 ¡Magia negra enviada a ${victima}!`, "var(--walicho)");
         });
+    }
+
+    // Modo Dios Admin
+    function simularWalicho(tipo) {
+        if (!audioCtx) initAudio();
+        if (!tipo) { walichoSufrido = null; mostrarToast("✨ Limpiaste tu aura. Ya no tenés Walichos.", "var(--text-muted)"); } 
+        else { walichoSufrido = { tipo: tipo, partidoId: 1 }; mostrarToast(`Te acaban de tirar un Walicho: ${tipo.toUpperCase()}`, "var(--walicho)"); }
+        renderFaseGrupos(document.getElementById('groupSelect') ? document.getElementById('groupSelect').value : 'A');
     }
 
     function simularMadrugada() {

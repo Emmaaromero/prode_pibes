@@ -254,7 +254,7 @@
     // ==========================================
     // 1. CONFIGURACIÓN Y BASE DE DATOS
     // ==========================================
-    const API_URL = "https://script.google.com/macros/s/AKfycbyhFpd3I1saC8GYW7ebl_c5xHaGMTPONn8b2y_kNEr1rA9MV8YflQkvgAv_1LfIrCA/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbyucMYDyFU6xQmUQvAk_e6kp0lcUGux6-RB8rKJRnIi4aZb0nMSZ6q60Erpl3cjHsg/exec";
 
     const headsDatabase = {
         "Emma": "caricatura_emma.png", "Tomi": "caricatura_tomi.png", "Facu": "caricatura_facu.png",
@@ -265,7 +265,10 @@
 
     let selectedPiece = "pieza_auto.png"; 
     let currentUser = null;
-    let varCharges = 3; let walichoSemanalUsado = false; let walichoSufrido = null; let esMadrugadaSimulada = false;
+    let varCharges = 3; let walichoSemanalUsado = false; let esMadrugadaSimulada = false;
+    
+    // NUEVO: Array para guardar las maldiciones recibidas desde el servidor
+    let misWalichosSufridos = [];
 
     // Fixture Oficial (72 Partidos)
     const db = {
@@ -490,7 +493,21 @@
         hdHead.src = currentUser.head; hdHead.style.display = 'block';
         hdPiece.src = currentUser.piece; hdPiece.style.display = 'block';
         
-        renderFaseGrupos();
+        // --- SINCRONIZAR WALICHOS Y RANKING DEL BACKEND ---
+        mostrarToast("⏳ Sincronizando tablero...", "var(--accent)");
+        fetch(API_URL + "?jugador=" + encodeURIComponent(currentUser.username))
+            .then(res => res.json())
+            .then(data => {
+                // Si el backend responde con el formato nuevo {ranking: [], walichos: []}
+                if (data.walichos) {
+                    misWalichosSufridos = data.walichos;
+                    if (misWalichosSufridos.length > 0) {
+                        mostrarToast("🍄 ¡CUIDADO! Un rival te tiró un Walicho.", "var(--walicho)");
+                    }
+                }
+                renderFaseGrupos();
+            })
+            .catch(() => renderFaseGrupos());
     }
 
 
@@ -514,7 +531,10 @@
         partidos.forEach(p => {
             const predL = db.prediccionesUsuario[`${p.id}_L`] !== undefined ? db.prediccionesUsuario[`${p.id}_L`] : '';
             const predV = db.prediccionesUsuario[`${p.id}_V`] !== undefined ? db.prediccionesUsuario[`${p.id}_V`] : '';
-            let disableInput = (walichoSufrido && walichoSufrido.tipo === 'bloqueo' && walichoSufrido.partidoId == p.id) ? 'disabled' : '';
+            
+            // VERIFICA SI HAY UN CANDADO ACTIVO PARA ESTE PARTIDO DESDE EL BACKEND
+            let trampaActiva = misWalichosSufridos.find(w => w.partidoId == p.id);
+            let disableInput = (trampaActiva && trampaActiva.tipo === 'bloqueo') ? 'disabled' : '';
             let lockStyle = disableInput ? 'background-color: #334155; cursor: not-allowed;' : '';
 
             html += `
@@ -557,29 +577,34 @@
 
     function renderPosiciones() {
         contentDiv.innerHTML = `<div style="text-align:center; padding:40px; color:var(--text-muted);"><p>⏳ Actualizando tabla desde la base de datos...</p></div>`;
-        fetch(API_URL).then(res => res.json()).then(data => {
+        
+        // Fetch actualizado para pedir también los walichos (por si se los tiraron mientras estaba adentro)
+        fetch(API_URL + "?jugador=" + encodeURIComponent(currentUser.username)).then(res => res.json()).then(data => {
+            let rankingData = data.ranking || data; // Por si el backend devuelve el JSON o el array viejo
+            if (data.walichos) misWalichosSufridos = data.walichos; // Actualiza las maldiciones ocultas
+            
             let filas = '';
-            if(data.length === 0) filas = `<tr><td colspan="4" style="color:var(--text-muted);">Aún no hay puntos calculados</td></tr>`;
+            if(rankingData.length === 0) filas = `<tr><td colspan="4" style="color:var(--text-muted);">Aún no hay puntos calculados</td></tr>`;
             else {
                 // ORDENAR POR PUNTOS (De mayor a menor)
-                data.sort((a, b) => b.puntos - a.puntos);
+                rankingData.sort((a, b) => b.puntos - a.puntos);
                 
                 // Recalcular posiciones después de ordenar
                 let currentRank = 1;
-                data.forEach((jugador, index) => {
-                    if (index > 0 && jugador.puntos < data[index - 1].puntos) {
+                rankingData.forEach((jugador, index) => {
+                    if (index > 0 && jugador.puntos < rankingData[index - 1].puntos) {
                         currentRank = index + 1;
                     }
                     jugador.posicion = currentRank;
                 });
 
-                let totalJugadores = data.length;
-                data.forEach((jugador, index) => {
+                let totalJugadores = rankingData.length;
+                rankingData.forEach((jugador, index) => {
                     let claseOro = jugador.posicion === 1 ? 'class="pos-1"' : '';
                     let headImg = headsDatabase[jugador.jugador] || 'cabeza_default.png';
                     let pieceImg = (currentUser && jugador.jugador === currentUser.username) ? currentUser.piece : (jugador.piece || 'pieza_auto.png');
                     let hoverEffectClass = (currentUser && jugador.jugador !== currentUser.username) ? 'hover-effect' : '';
-                    let esUltimo = (index === totalJugadores - 1 && jugador.puntos === data[totalJugadores-1].puntos);
+                    let esUltimo = (index === totalJugadores - 1 && jugador.puntos === rankingData[totalJugadores-1].puntos);
                     filas += `
                         <tr class="leaderboard-row ${hoverEffectClass}" onmouseenter="playHoverSound('${jugador.jugador}', ${esUltimo})">
                             <td ${claseOro}>${jugador.posicion}</td>
@@ -589,7 +614,7 @@
                 });
             }
             contentDiv.innerHTML = `<table class="leaderboard"><thead><tr><th>Pos</th><th style="text-align: left; padding-left: 50px;">Jugador</th><th>Pts</th><th>Exactos</th></tr></thead><tbody>${filas}</tbody></table>`;
-        }).catch(error => { contentDiv.innerHTML = `<div style="text-align:center; padding:40px; color:var(--danger);"><p>Aún no has conectado la URL del Apps Script o hay un error de red.</p></div>`; });
+        }).catch(error => { contentDiv.innerHTML = `<div style="text-align:center; padding:40px; color:var(--danger);"><p>Error de conexión con la base de datos.</p></div>`; });
     }
 
     function renderReglas() { 
@@ -609,23 +634,7 @@
                 <li><strong>7. El Underdog (Pasiva):</strong> El que vaya último multiplica x2 lo que gane ese día.</li>
                 <li><strong>8. VAR y Walichos 📺🍄:</strong> Tenés 3 usos de VAR en el torneo. Además, una vez por semana podés tirarle un Walicho a un rival para sabotearlo.</li>
             </ul>
-        </div>
-        
-        <div class="dev-panel" id="panel-admin" style="display:none;">
-            <h4>🧪 Panel de Admin (Modo Dios)</h4>
-            <p style="margin-bottom:10px; color:var(--text-muted);">Simulá que te cayó una trampa o cambiá la hora para probar los secretos.</p>
-            <button class="dev-btn" onclick="simularWalicho('pares')">Walicho: Pares</button>
-            <button class="dev-btn" onclick="simularWalicho('impares')">Walicho: Impares</button>
-            <button class="dev-btn" onclick="simularWalicho('x2')">Walicho: x2</button>
-            <button class="dev-btn" onclick="simularWalicho(null)">Limpiar Walicho</button>
-            <hr style="border-color:#555; margin:10px 0;">
-            <button class="dev-btn" onclick="simularMadrugada()">Simular Reloj 3:00 AM</button>
         </div>`; 
-        
-        if (currentUser && currentUser.username === "Emma") {
-            const adminPanel = document.getElementById('panel-admin');
-            if (adminPanel) adminPanel.style.display = 'block';
-        }
     }
 
 
@@ -646,11 +655,13 @@
             playSfx('audio-estas_seguro');
         }
 
-        // Walicho Local
-        if (walichoSufrido) {
-            if (walichoSufrido.tipo === 'pares' && val % 2 !== 0) { val++; mostrarToast("🍄 ¡Walicho de un Rival! Tus resultados se corrigen a PARES.", "var(--walicho)"); }
-            if (walichoSufrido.tipo === 'impares' && val % 2 === 0) { val++; mostrarToast("🍄 ¡Walicho de un Rival! Tus resultados se corrigen a IMPARES.", "var(--walicho)"); }
-            if (walichoSufrido.tipo === 'x2') { val = val * 2; mostrarToast("🍄 ¡Walicho! Viste doble, tus goles se multiplicaron x2.", "var(--walicho)"); }
+        // VERIFICA SI ESTE PARTIDO TIENE UNA TRAMPA DESDE EL BACKEND
+        const trampaActiva = misWalichosSufridos.find(w => w.partidoId == id);
+        
+        if (trampaActiva) {
+            if (trampaActiva.tipo === 'pares' && val % 2 !== 0) { val++; mostrarToast("🍄 ¡Walicho de un Rival! Tus resultados se corrigen a PARES.", "var(--walicho)"); }
+            if (trampaActiva.tipo === 'impares' && val % 2 === 0) { val++; mostrarToast("🍄 ¡Walicho de un Rival! Tus resultados se corrigen a IMPARES.", "var(--walicho)"); }
+            if (trampaActiva.tipo === 'x2') { val = val * 2; mostrarToast("🍄 ¡Walicho! Viste doble, tus goles se multiplicaron x2.", "var(--walicho)"); }
             inputEl.value = val;
         }
 
@@ -699,29 +710,43 @@
         if (objetivo) {
             varCharges--;
             mostrarToast(`📺 REVISIÓN TERMINADA: ${objetivo} puso un 2-0 acá.`, "var(--var-color)");
-            renderFaseGrupos(document.getElementById('groupSelect').value);
         }
     }
 
     function abrirMenuWalicho() {
         playSfx('audio-trampa', 6000);
         if (walichoSemanalUsado) return mostrarToast("🍄 Ya usaste tu Walicho esta semana. Dejá jugar en paz.", "var(--danger)");
-        let victima = prompt("🍄 MENÚ DE WALICHOS 🍄\n\n¿A quién le querés arruinar la fecha? (Ej: Valentina)");
-        if (!victima) return;
+        
+        let victima = prompt("🍄 MENÚ DE WALICHOS 🍄\n\n¿A quién le querés arruinar la fecha? (Ej: Tomi, Facu, etc)");
+        if (!victima || victima === currentUser.username) return;
+        
         let trampa = prompt(`Vas a maldecir a ${victima}.\nElegí el número de la trampa:\n1. Pies Redondos (Fuerza Pares)\n2. Pata Dura (Fuerza Impares)\n3. Espejismo (Multiplica x2)\n4. Candado (Bloquea Partido)`);
-        if (trampa) {
+        if (!trampa) return;
+        
+        let tipoMap = {"1": "pares", "2": "impares", "3": "x2", "4": "bloqueo"};
+        let tipoFinal = tipoMap[trampa];
+        if (!tipoFinal) return mostrarToast("Opción de trampa inválida", "var(--danger)");
+
+        let partidoId = prompt(`¿Qué número de partido (1 al 72) querés bloquearle o alterarle a ${victima}?`);
+        if (!partidoId || isNaN(partidoId) || partidoId < 1 || partidoId > 72) return mostrarToast("Número de partido inválido", "var(--danger)");
+
+        mostrarToast("⏳ Conjurando el Walicho...", "var(--purple)");
+        
+        const payload = {
+            accion: "tirar_walicho",
+            atacante: currentUser.username,
+            victima: victima,
+            tipo: tipoFinal,
+            partidoId: parseInt(partidoId)
+        };
+
+        // Enviar la maldición al Backend (Google Sheets)
+        fetch(API_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
+        .then(() => {
             walichoSemanalUsado = true;
             document.getElementById('btn-walicho').classList.add('usado');
-            mostrarToast(`🍄 ¡Le mandaste un Walicho a ${victima}!`, "var(--walicho)");
-        }
-    }
-
-    // Modo Dios Admin
-    function simularWalicho(tipo) {
-        if (!audioCtx) initAudio();
-        if (!tipo) { walichoSufrido = null; mostrarToast("✨ Limpiaste tu aura. Ya no tenés Walichos.", "var(--text-muted)"); } 
-        else { walichoSufrido = { tipo: tipo, partidoId: 1 }; mostrarToast(`Te acaban de tirar un Walicho: ${tipo.toUpperCase()}`, "var(--walicho)"); }
-        renderFaseGrupos(document.getElementById('groupSelect') ? document.getElementById('groupSelect').value : 'A');
+            mostrarToast(`🍄 ¡Magia negra enviada a ${victima}!`, "var(--walicho)");
+        });
     }
 
     function simularMadrugada() {

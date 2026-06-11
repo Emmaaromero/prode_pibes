@@ -111,6 +111,20 @@
         .river-overlay h1 { background: black; color: white; padding: 20px; border-radius: 10px; font-size: 3rem; text-align:center; transform: scale(0.5); transition: transform 0.5s; box-shadow: 0 10px 30px rgba(0,0,0,0.5);}
         .river-overlay.show { opacity: 0.9; }
         .river-overlay.show h1 { transform: scale(1); }
+
+        /* ================= NUEVO: CSS DEL MODAL WALICHO ================= */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; align-items: center; justify-content: center; z-index: 2000; opacity: 0; transition: opacity 0.3s; }
+        .modal-overlay.show { display: flex; opacity: 1; }
+        .modal-content { background: var(--bg-card); padding: 25px; border-radius: 15px; border: 2px solid var(--walicho); width: 90%; max-width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+        .modal-content h3 { color: var(--walicho); margin-bottom: 15px; text-align: center; font-size: 1.5rem; text-transform: uppercase; }
+        .modal-content label { display: block; margin-bottom: 8px; color: var(--accent); font-weight: bold; font-size: 0.9rem; margin-top: 15px; }
+        .modal-content select { width: 100%; padding: 12px; background: var(--bg-dark); color: white; border: 1px solid var(--border); border-radius: 8px; font-size: 0.95rem; outline: none; }
+        .modal-actions { display: flex; gap: 10px; margin-top: 25px; }
+        .modal-actions button { flex: 1; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; border: none; transition: 0.2s; }
+        .btn-cancel { background: transparent; border: 1px solid var(--danger); color: var(--danger); }
+        .btn-cancel:hover { background: rgba(239, 68, 68, 0.1); }
+        .btn-confirm { background: linear-gradient(135deg, #d946ef, #9333ea); color: white; }
+        .btn-confirm:hover { filter: brightness(1.2); }
     </style>
 </head>
 <body>
@@ -246,6 +260,31 @@
 
         <div class="fab-walicho" id="btn-walicho" onclick="abrirMenuWalicho()" title="Tirar un Walicho">🍄</div>
     </div>
+
+    <div id="modal-walicho" class="modal-overlay">
+        <div class="modal-content">
+            <h3>🍄 Tirar Walicho</h3>
+            
+            <label>¿A quién vas a maldecir?</label>
+            <select id="w-victima"></select>
+
+            <label>¿Qué trampa vas a usar?</label>
+            <select id="w-trampa">
+                <option value="pares">Pies Redondos (Fuerza Pares)</option>
+                <option value="impares">Pata Dura (Fuerza Impares)</option>
+                <option value="x2">Espejismo (Multiplica x2)</option>
+                <option value="bloqueo">Candado (Bloquea Partido)</option>
+            </select>
+
+            <label>¿A qué partido le vas a apuntar?</label>
+            <select id="w-partido"></select>
+
+            <div class="modal-actions">
+                <button class="btn-cancel" onclick="cerrarModalWalicho()">Cancelar</button>
+                <button class="btn-confirm" onclick="confirmarWalicho()">Lanzar Maldición</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div id="toast">✅ Acción completada</div>
@@ -255,6 +294,11 @@
     // 1. CONFIGURACIÓN Y BASE DE DATOS
     // ==========================================
     const API_URL = "https://script.google.com/macros/s/AKfycbyIXDv2tMQ62pg-yTk5RpfurvCKEtnGDXSvizVTQyFUWL3LvBb0ItiA0jh-bDIpQqQ/exec";
+
+    // 🔴 IMPORTANTE: Cambiá este número a medida que avance el mundial
+    // para que en el modal no le aparezcan los partidos que ya pasaron.
+    // Ej: Si pones 10, en el desplegable de trampa solo aparecen del 11 al 72.
+    const ULTIMO_PARTIDO_JUGADO = 0; 
 
     const headsDatabase = {
         "Emma": "caricatura_emma.png", "Tomi": "caricatura_tomi.png", "Facu": "caricatura_facu.png",
@@ -266,8 +310,6 @@
     let selectedPiece = "pieza_auto.png"; 
     let currentUser = null;
     let varCharges = 3; let walichoSemanalUsado = false; let esMadrugadaSimulada = false;
-    
-    // Array para guardar las maldiciones recibidas desde el servidor
     let misWalichosSufridos = [];
 
     // Fixture Oficial (72 Partidos)
@@ -350,7 +392,6 @@
         themeAudio.currentTime = 0;
         
         themeAudio.play().then(() => {
-            // Límite de 45 segundos para el tema del país
             let themeTimer = setTimeout(() => {
                 if (!themeAudio.paused) {
                     themeAudio.pause();
@@ -368,7 +409,6 @@
         }).catch(e => console.log("Audio de país bloqueado.", e));
     }
 
-    // Acepta un límite de duración en milisegundos (ej: 6000 para 6 segs)
     function playSfx(id, maxDurationMs = null) {
         const sfx = document.getElementById(id);
         if (sfx) {
@@ -429,7 +469,6 @@
         document.getElementById('preview-piece').src = selectedPiece; 
         document.getElementById('preview-piece').style.display = 'block'; 
         
-        // Poblar podios
         const equiposUnicos = [...new Set(db.partidosGrupos.map(p => p.local).concat(db.partidosGrupos.map(p => p.visitante)))].sort();
         const selectsPodio = ['select-campeon', 'select-subcampeon', 'select-tercero'];
         
@@ -493,7 +532,6 @@
         hdHead.src = currentUser.head; hdHead.style.display = 'block';
         hdPiece.src = currentUser.piece; hdPiece.style.display = 'block';
         
-// --- SINCRONIZAR WALICHOS Y RANKING DEL BACKEND ---
         mostrarToast("⏳ Sincronizando tablero...", "var(--accent)");
         fetch(API_URL + "?jugador=" + encodeURIComponent(currentUser.username))
             .then(res => res.json())
@@ -501,14 +539,10 @@
                 if (data.walichos) {
                     misWalichosSufridos = data.walichos;
                     if (misWalichosSufridos.length > 0) {
-                        // Extrae los datos del ataque
                         let atacante = misWalichosSufridos[0].atacante; 
                         let pId = misWalichosSufridos[0].partidoId;
-                        
-                        // Busca los nombres de los equipos en el Fixture
                         let partidoEncontrado = db.partidosGrupos.find(p => p.id == pId);
                         let nombrePartido = partidoEncontrado ? (partidoEncontrado.local + " vs " + partidoEncontrado.visitante) : ("Partido #" + pId);
-                        
                         mostrarToast(`🍄 ¡CUIDADO! ${atacante} te tiró un Walicho en: ${nombrePartido}`, "var(--walicho)");
                     }
                 }
@@ -539,7 +573,6 @@
             const predL = db.prediccionesUsuario[`${p.id}_L`] !== undefined ? db.prediccionesUsuario[`${p.id}_L`] : '';
             const predV = db.prediccionesUsuario[`${p.id}_V`] !== undefined ? db.prediccionesUsuario[`${p.id}_V`] : '';
             
-            // VERIFICA SI HAY UN CANDADO ACTIVO PARA ESTE PARTIDO DESDE EL BACKEND
             let trampaActiva = misWalichosSufridos.find(w => w.partidoId == p.id);
             let disableInput = (trampaActiva && trampaActiva.tipo === 'bloqueo') ? 'disabled' : '';
             let lockStyle = disableInput ? 'background-color: #334155; cursor: not-allowed;' : '';
@@ -563,7 +596,6 @@
             </div>`;
         });
 
-        // Trampa Chile (Sin audio trampa)
         html += `
         <div class="match-card" style="border-color: rgba(239, 68, 68, 0.5); background: linear-gradient(145deg, var(--bg-card), rgba(239, 68, 68, 0.05)); margin-top: 30px;">
             <div class="match-header"><span style="color: var(--danger); font-weight:bold;">Partido Especial • Repechaje</span><span>⚽ Partido #999</span></div>
@@ -585,18 +617,15 @@
     function renderPosiciones() {
         contentDiv.innerHTML = `<div style="text-align:center; padding:40px; color:var(--text-muted);"><p>⏳ Actualizando tabla desde la base de datos...</p></div>`;
         
-        // Fetch actualizado para pedir también los walichos (por si se los tiraron mientras estaba adentro)
         fetch(API_URL + "?jugador=" + encodeURIComponent(currentUser.username)).then(res => res.json()).then(data => {
-            let rankingData = data.ranking || data; // Por si el backend devuelve el JSON o el array viejo
-            if (data.walichos) misWalichosSufridos = data.walichos; // Actualiza las maldiciones ocultas
+            let rankingData = data.ranking || data; 
+            if (data.walichos) misWalichosSufridos = data.walichos; 
             
             let filas = '';
             if(rankingData.length === 0) filas = `<tr><td colspan="4" style="color:var(--text-muted);">Aún no hay puntos calculados</td></tr>`;
             else {
-                // ORDENAR POR PUNTOS (De mayor a menor)
                 rankingData.sort((a, b) => b.puntos - a.puntos);
                 
-                // Recalcular posiciones después de ordenar
                 let currentRank = 1;
                 rankingData.forEach((jugador, index) => {
                     if (index > 0 && jugador.puntos < rankingData[index - 1].puntos) {
@@ -670,7 +699,6 @@
 
         const partido = db.partidosGrupos.find(p => p.id == id);
         
-        // SFX Equipos Débiles (Se activa SOLO si le ponés 1 gol o más al equipo débil directamente)
         const equipoModificado = type === 'L' ? partido?.local : partido?.visitante;
         const debiles = ["Curazao", "Haití", "Jordania", "Panamá", "Argelia", "RD Congo", "Sudáfrica", "Cabo Verde"];
         
@@ -678,11 +706,10 @@
             playSfx('audio-estas_seguro');
         }
 
-        // VERIFICA SI ESTE PARTIDO TIENE UNA TRAMPA DESDE EL BACKEND
         const trampaActiva = misWalichosSufridos.find(w => w.partidoId == id);
         
         if (trampaActiva) {
-            let atacante = trampaActiva.atacante; // Acá agarramos el nombre
+            let atacante = trampaActiva.atacante; 
             
             if (trampaActiva.tipo === 'pares' && val % 2 !== 0) { val++; mostrarToast(`🍄 ¡Walicho de ${atacante}! Se corrige a PARES.`, "var(--walicho)"); }
             if (trampaActiva.tipo === 'impares' && val % 2 === 0) { val++; mostrarToast(`🍄 ¡Walicho de ${atacante}! Se corrige a IMPARES.`, "var(--walicho)"); }
@@ -690,19 +717,16 @@
             inputEl.value = val;
         }
 
-        // Guardado Local
         db.prediccionesUsuario[`${id}_${type}`] = val; 
         let localInput = db.prediccionesUsuario[`${id}_L`];
         let awayInput = db.prediccionesUsuario[`${id}_V`];
         
-        // Audio Theme
         if (partido) {
             let paisesMusicales = ["Argentina", "Brasil", "Francia", "Estados Unidos", "España", "Alemania", "Colombia", "Países Bajos", "Uruguay", "México"];
             let paisEncontrado = paisesMusicales.find(p => p === partido.local || p === partido.visitante);
             if (paisEncontrado) reproducirAudioTema(paisEncontrado);
         }
 
-        // Easter Eggs Numéricos
         if (val == 7) mostrarToast("¿7 goles? Demasiado cine, intentá con algo más realista. 🇧🇷", "var(--danger)");
         else if ((localInput == 3 && awayInput == 1) || (localInput == 1 && awayInput == 3)) mostrarToast("Y va el tercero... y va el tercero... 🐔", "var(--gold)");
         else if ((localInput == 9 && awayInput == 12) || (localInput == 12 && awayInput == 9)) {
@@ -738,48 +762,71 @@
         }
     }
 
+    // ==========================================
+    // NUEVO SISTEMA DE WALICHO EN MODAL
+    // ==========================================
     function abrirMenuWalicho() {
         playSfx('audio-trampa', 6000);
         if (walichoSemanalUsado) return mostrarToast("🍄 Ya usaste tu Walicho. Acordate que podés tirar uno nuevo cada 3 días.", "var(--danger)");
         
-        let victima = prompt("🍄 MENÚ DE WALICHOS 🍄\n\n¿A quién le querés arruinar la fecha? (Ej: Tomi, Facu, etc)");
-        if (!victima || victima === currentUser.username) return;
-        
-        let trampa = prompt(`Vas a maldecir a ${victima}.\nElegí el número de la trampa:\n1. Pies Redondos (Fuerza Pares)\n2. Pata Dura (Fuerza Impares)\n3. Espejismo (Multiplica x2)\n4. Candado (Bloquea Partido)`);
-        if (!trampa) return;
-        
-        let tipoMap = {"1": "pares", "2": "impares", "3": "x2", "4": "bloqueo"};
-        let tipoFinal = tipoMap[trampa];
-        if (!tipoFinal) return mostrarToast("Opción de trampa inválida", "var(--danger)");
+        // Cargar víctimas (menos uno mismo)
+        const selectVictima = document.getElementById('w-victima');
+        selectVictima.innerHTML = '';
+        const jugadores = ["Emma", "Tomi", "Facu", "Rodri", "Mono", "Tano", "Maxi", "FAK", "Blangi", "Kiki"];
+        jugadores.forEach(j => {
+            if (j !== currentUser.username) selectVictima.innerHTML += `<option value="${j}">${j}</option>`;
+        });
 
-        let partidoId = prompt(`¿Qué número de partido (1 al 72) querés bloquearle o alterarle a ${victima}?`);
-        if (!partidoId || isNaN(partidoId) || partidoId < 1 || partidoId > 72) return mostrarToast("Número de partido inválido", "var(--danger)");
+        // Cargar partidos (filtrando los que ya pasaron gracias a ULTIMO_PARTIDO_JUGADO)
+        const selectPartido = document.getElementById('w-partido');
+        selectPartido.innerHTML = '';
+        
+        const partidosDisponibles = db.partidosGrupos.filter(p => p.id > ULTIMO_PARTIDO_JUGADO);
+        
+        if (partidosDisponibles.length === 0) {
+            return mostrarToast("No quedan partidos disponibles para atacar.", "var(--danger)");
+        }
 
-        // --- ACÁ ESTÁ LA MAGIA QUE TRADUCE EL NÚMERO A NOMBRE ---
-        let partidoAtacado = db.partidosGrupos.find(p => p.id == parseInt(partidoId));
+        partidosDisponibles.forEach(p => {
+            selectPartido.innerHTML += `<option value="${p.id}">Partido #${p.id}: ${p.local} vs ${p.visitante}</option>`;
+        });
+
+        // Mostrar la ventana modal customizada
+        document.getElementById('modal-walicho').classList.add('show');
+    }
+
+    function cerrarModalWalicho() {
+        document.getElementById('modal-walicho').classList.remove('show');
+    }
+
+    function confirmarWalicho() {
+        const victima = document.getElementById('w-victima').value;
+        const trampa = document.getElementById('w-trampa').value;
+        const partidoId = parseInt(document.getElementById('w-partido').value);
+
+        if (!victima || !trampa || !partidoId) return;
+
+        let partidoAtacado = db.partidosGrupos.find(p => p.id === partidoId);
         let nombrePartidoAtaque = partidoAtacado ? (partidoAtacado.local + " vs " + partidoAtacado.visitante) : ("Partido #" + partidoId);
 
+        cerrarModalWalicho();
         mostrarToast("⏳ Conjurando el Walicho...", "var(--purple)");
         
         const payload = {
             accion: "tirar_walicho",
             atacante: currentUser.username,
             victima: victima,
-            tipo: tipoFinal,
-            partidoId: parseInt(partidoId)
+            tipo: trampa,
+            partidoId: partidoId
         };
 
-        // Enviar la maldición al Backend (Google Sheets)
         fetch(API_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
         .then(() => {
             walichoSemanalUsado = true;
             document.getElementById('btn-walicho').classList.add('usado');
-            
-            // --- ACÁ MUESTRA EL NOMBRE TRADUCIDO EN EL CARTEL VERDE ---
-            mostrarToast(`🍄 ¡Magia negra enviada a ${victima} para ${nombrePartidoAtaque}!`, "var(--walicho)");
+            mostrarToast(`🍄 ¡Magia negra enviada a ${victima} para el partido ${nombrePartidoAtaque}!`, "var(--walicho)");
         });
     }
-
 
     // Modo Dios Admin
     function simularWalicho(tipo) {

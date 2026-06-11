@@ -493,16 +493,17 @@
         hdHead.src = currentUser.head; hdHead.style.display = 'block';
         hdPiece.src = currentUser.piece; hdPiece.style.display = 'block';
         
-        // --- SINCRONIZAR WALICHOS Y RANKING DEL BACKEND ---
+// --- SINCRONIZAR WALICHOS Y RANKING DEL BACKEND ---
         mostrarToast("⏳ Sincronizando tablero...", "var(--accent)");
         fetch(API_URL + "?jugador=" + encodeURIComponent(currentUser.username))
             .then(res => res.json())
             .then(data => {
-                // Si el backend responde con el formato nuevo {ranking: [], walichos: []}
                 if (data.walichos) {
                     misWalichosSufridos = data.walichos;
                     if (misWalichosSufridos.length > 0) {
-                        mostrarToast("🍄 ¡CUIDADO! Un rival te tiró un Walicho.", "var(--walicho)");
+                        // Extrae el nombre del atacante
+                        let atacante = misWalichosSufridos[0].atacante; 
+                        mostrarToast(`🍄 ¡CUIDADO! ${atacante} te tiró un Walicho.`, "var(--walicho)");
                     }
                 }
                 renderFaseGrupos();

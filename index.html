@@ -501,9 +501,15 @@
                 if (data.walichos) {
                     misWalichosSufridos = data.walichos;
                     if (misWalichosSufridos.length > 0) {
-                        // Extrae el nombre del atacante
+                        // Extrae los datos del ataque
                         let atacante = misWalichosSufridos[0].atacante; 
-                        mostrarToast(`🍄 ¡CUIDADO! ${atacante} te tiró un Walicho.`, "var(--walicho)");
+                        let pId = misWalichosSufridos[0].partidoId;
+                        
+                        // Busca los nombres de los equipos en el Fixture
+                        let partidoEncontrado = db.partidosGrupos.find(p => p.id == pId);
+                        let nombrePartido = partidoEncontrado ? (partidoEncontrado.local + " vs " + partidoEncontrado.visitante) : ("Partido #" + pId);
+                        
+                        mostrarToast(`🍄 ¡CUIDADO! ${atacante} te tiró un Walicho en: ${nombrePartido}`, "var(--walicho)");
                     }
                 }
                 renderFaseGrupos();
@@ -749,6 +755,10 @@
         let partidoId = prompt(`¿Qué número de partido (1 al 72) querés bloquearle o alterarle a ${victima}?`);
         if (!partidoId || isNaN(partidoId) || partidoId < 1 || partidoId > 72) return mostrarToast("Número de partido inválido", "var(--danger)");
 
+        // Busca los nombres de las selecciones para confirmar el ataque
+        let partidoAtacado = db.partidosGrupos.find(p => p.id == parseInt(partidoId));
+        let nombrePartidoAtaque = partidoAtacado ? (partidoAtacado.local + " vs " + partidoAtacado.visitante) : ("Partido #" + partidoId);
+
         mostrarToast("⏳ Conjurando el Walicho...", "var(--purple)");
         
         const payload = {
@@ -764,9 +774,11 @@
         .then(() => {
             walichoSemanalUsado = true;
             document.getElementById('btn-walicho').classList.add('usado');
-            mostrarToast(`🍄 ¡Magia negra enviada a ${victima}!`, "var(--walicho)");
+            // Muestra el nombre de las selecciones en el mensaje de éxito
+            mostrarToast(`🍄 ¡Magia negra enviada a ${victima} para ${nombrePartidoAtaque}!`, "var(--walicho)");
         });
     }
+
 
     // Modo Dios Admin
     function simularWalicho(tipo) {

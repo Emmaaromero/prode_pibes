@@ -755,7 +755,7 @@
         let partidoId = prompt(`¿Qué número de partido (1 al 72) querés bloquearle o alterarle a ${victima}?`);
         if (!partidoId || isNaN(partidoId) || partidoId < 1 || partidoId > 72) return mostrarToast("Número de partido inválido", "var(--danger)");
 
-        // Busca los nombres de las selecciones para confirmar el ataque
+        // --- ACÁ ESTÁ LA MAGIA QUE TRADUCE EL NÚMERO A NOMBRE ---
         let partidoAtacado = db.partidosGrupos.find(p => p.id == parseInt(partidoId));
         let nombrePartidoAtaque = partidoAtacado ? (partidoAtacado.local + " vs " + partidoAtacado.visitante) : ("Partido #" + partidoId);
 
@@ -774,7 +774,8 @@
         .then(() => {
             walichoSemanalUsado = true;
             document.getElementById('btn-walicho').classList.add('usado');
-            // Muestra el nombre de las selecciones en el mensaje de éxito
+            
+            // --- ACÁ MUESTRA EL NOMBRE TRADUCIDO EN EL CARTEL VERDE ---
             mostrarToast(`🍄 ¡Magia negra enviada a ${victima} para ${nombrePartidoAtaque}!`, "var(--walicho)");
         });
     }

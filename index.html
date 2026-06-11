@@ -676,9 +676,11 @@
         const trampaActiva = misWalichosSufridos.find(w => w.partidoId == id);
         
         if (trampaActiva) {
-            if (trampaActiva.tipo === 'pares' && val % 2 !== 0) { val++; mostrarToast("🍄 ¡Walicho de un Rival! Tus resultados se corrigen a PARES.", "var(--walicho)"); }
-            if (trampaActiva.tipo === 'impares' && val % 2 === 0) { val++; mostrarToast("🍄 ¡Walicho de un Rival! Tus resultados se corrigen a IMPARES.", "var(--walicho)"); }
-            if (trampaActiva.tipo === 'x2') { val = val * 2; mostrarToast("🍄 ¡Walicho! Viste doble, tus goles se multiplicaron x2.", "var(--walicho)"); }
+            let atacante = trampaActiva.atacante; // Acá agarramos el nombre
+            
+            if (trampaActiva.tipo === 'pares' && val % 2 !== 0) { val++; mostrarToast(`🍄 ¡Walicho de ${atacante}! Se corrige a PARES.`, "var(--walicho)"); }
+            if (trampaActiva.tipo === 'impares' && val % 2 === 0) { val++; mostrarToast(`🍄 ¡Walicho de ${atacante}! Se corrige a IMPARES.`, "var(--walicho)"); }
+            if (trampaActiva.tipo === 'x2') { val = val * 2; mostrarToast(`🍄 ¡Walicho de ${atacante}! Viste doble, vale x2.`, "var(--walicho)"); }
             inputEl.value = val;
         }
 

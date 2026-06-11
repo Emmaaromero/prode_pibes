@@ -143,6 +143,7 @@
 <audio id="audio-holanda" src="holanda.mp3" preload="auto"></audio>
 <audio id="audio-uruguay" src="uruguay.ogg" preload="auto"></audio>
 <audio id="audio-mexico" src="mexico.mp3" preload="auto"></audio>
+<audio id="audio-noruega" src="noruega.mp3" preload="auto"></audio>
 
 <audio id="audio-rock" src="rock.mp3" preload="auto"></audio>
 <audio id="audio-912" src="912.mp3" preload="auto"></audio>
@@ -370,7 +371,7 @@
             "Argentina": "audio-argentina", "Brasil": "audio-brasil", "Francia": "audio-francia", "México": "audio-mexico",
             "Estados Unidos": "audio-usa", "España": "audio-espana", "Alemania": "audio-alemania", 
             "Colombia": "audio-colombia", "Países Bajos": "audio-holanda", "Uruguay": "audio-uruguay",
-            "912": "audio-912", "rock": "audio-rock"
+            "912": "audio-912", "rock": "audio-rock", "noruega": "audio-noruega"
         };
         const themeId = audioIds[pais];
         if (!themeId) return;
@@ -722,7 +723,7 @@
         let awayInput = db.prediccionesUsuario[`${id}_V`];
         
         if (partido) {
-            let paisesMusicales = ["Argentina", "Brasil", "Francia", "Estados Unidos", "España", "Alemania", "Colombia", "Países Bajos", "Uruguay", "México"];
+            let paisesMusicales = ["Argentina", "Brasil", "Francia", "Estados Unidos", "España", "Alemania", "Colombia", "Países Bajos", "Noruega", "Uruguay", "México"];
             let paisEncontrado = paisesMusicales.find(p => p === partido.local || p === partido.visitante);
             if (paisEncontrado) reproducirAudioTema(paisEncontrado);
         }

@@ -214,6 +214,10 @@
                 </div>
             </div>
 
+            let varCharges = 3; let walichoSemanalUsado = false; let esMadrugadaSimulada = false;
+            let misWalichosSufridos = [];
+            let datosGlobalesServer = {}; // <--- NUEVA VARIABLE
+
             <div class="form-group">
                 <label>3. Elegí el Podio Final del Mundial</label>
                 <select id="select-campeon">
@@ -253,6 +257,7 @@
             <div class="nav-tabs">
                 <button class="tab-btn active" onclick="switchTab('grupos', this)">Partidos</button>
                 <button class="tab-btn" onclick="switchTab('posiciones', this)">Posiciones</button>
+                <button class="tab-btn" onclick="switchTab('auditoria', this)">Auditoría</button>
                 <button class="tab-btn" onclick="switchTab('reglas', this)">Reglas</button>
             </div>
         </header>
@@ -294,7 +299,7 @@
     // ==========================================
     // 1. CONFIGURACIÓN Y BASE DE DATOS
     // ==========================================
-    const API_URL = "https://script.google.com/macros/s/AKfycbyIXDv2tMQ62pg-yTk5RpfurvCKEtnGDXSvizVTQyFUWL3LvBb0ItiA0jh-bDIpQqQ/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbxPaChbK1LFVieGWKUDTDTFj3O7Mh4WB9XlgyTVRRwaptJ7eMDNBW8zxseNfJf4-jY/exec";
 
     // 🔴 IMPORTANTE: Cambiá este número a medida que avance el mundial
     // para que en el modal no le aparezcan los partidos que ya pasaron.
@@ -310,8 +315,10 @@
 
     let selectedPiece = "pieza_auto.png"; 
     let currentUser = null;
+    // --- PEGALO ACÁ, REEMPLAZANDO LAS VARIABLES VIEJAS ---
     let varCharges = 3; let walichoSemanalUsado = false; let esMadrugadaSimulada = false;
     let misWalichosSufridos = [];
+    let datosGlobalesServer = {};
 
     // Fixture Oficial (72 Partidos)
     const db = {
@@ -537,8 +544,10 @@
         fetch(API_URL + "?jugador=" + encodeURIComponent(currentUser.username))
             .then(res => res.json())
             .then(data => {
+                datosGlobalesServer = data; // Guarda todo en memoria
                 if (data.walichos) {
-                    misWalichosSufridos = data.walichos;
+                    // Filtra solo los walichos que tienen como víctima al usuario actual
+                    misWalichosSufridos = data.walichos.filter(w => w.victima === currentUser.username);
                     if (misWalichosSufridos.length > 0) {
                         let atacante = misWalichosSufridos[0].atacante; 
                         let pId = misWalichosSufridos[0].partidoId;
@@ -562,6 +571,7 @@
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); 
         if (tab === 'grupos') renderFaseGrupos(); 
         if (tab === 'posiciones') renderPosiciones(); 
+        if (tab === 'auditoria') renderAuditoria(); // <--- NUEVA LÍNEA
         if (tab === 'reglas') renderReglas(); 
         document.getElementById('btn-walicho').style.display = (tab === 'grupos') ? 'flex' : 'none';
     }
@@ -652,6 +662,69 @@
             }
             contentDiv.innerHTML = `<table class="leaderboard"><thead><tr><th>Pos</th><th style="text-align: left; padding-left: 50px;">Jugador</th><th>Pts</th><th>Exactos</th></tr></thead><tbody>${filas}</tbody></table>`;
         }).catch(error => { contentDiv.innerHTML = `<div style="text-align:center; padding:40px; color:var(--danger);"><p>Error de conexión con la base de datos.</p></div>`; });
+    }
+
+    function renderAuditoria() {
+        if (!datosGlobalesServer.predicciones) {
+            contentDiv.innerHTML = `<div style="text-align:center; padding:40px; color:var(--text-muted);"><p>Aún no hay datos públicos disponibles.</p></div>`;
+            return;
+        }
+
+        let html = `<h3 style="color:var(--accent); margin-bottom:15px; text-transform: uppercase;">👁️ Gran Hermano</h3>`;
+        
+        // Bloque de Walichos y Dados
+        html += `<div class="match-card" style="margin-bottom: 20px;">
+                    <h4 style="color:var(--walicho); margin-bottom:10px;">📜 Registro de Habilidades</h4>`;
+        
+        if (datosGlobalesServer.walichos && datosGlobalesServer.walichos.length > 0) {
+            datosGlobalesServer.walichos.forEach(w => {
+                let p = db.partidosGrupos.find(x => x.id == w.partidoId);
+                let pName = p ? `${p.local} vs ${p.visitante}` : `Partido ${w.partidoId}`;
+                html += `<p style="font-size:0.85rem; border-left: 2px solid var(--walicho); padding-left:8px; margin-bottom:5px;">🍄 <strong>${w.atacante}</strong> maldijo a <strong>${w.victima}</strong> en ${pName} (${w.tipo}).</p>`;
+            });
+        } else {
+            html += `<p style="font-size:0.8rem; color:var(--text-muted);">Nadie tiró Walichos todavía.</p>`;
+        }
+
+        if (datosGlobalesServer.dados && datosGlobalesServer.dados.length > 0) {
+            html += `<hr style="border-color:var(--border); margin:10px 0;">`;
+            datosGlobalesServer.dados.forEach(d => {
+                let p = db.partidosGrupos.find(x => x.id == d.partidoId);
+                let pName = p ? `${p.local} vs ${p.visitante}` : `Partido ${d.partidoId}`;
+                html += `<p style="font-size:0.85rem; border-left: 2px solid var(--purple); padding-left:8px; margin-bottom:5px;">🎲 <strong>${d.jugador}</strong> activó dados en ${pName}.</p>`;
+            });
+        }
+        html += `</div>`;
+
+        // Bloque de Predicciones Públicas
+        html += `<h4 style="color:var(--text-main); margin-bottom:10px;">📊 Pronósticos (Partidos Iniciados)</h4>`;
+        
+        let prediccionesAgrupadas = {};
+        datosGlobalesServer.predicciones.forEach(pred => {
+            if (!prediccionesAgrupadas[pred.partidoId]) prediccionesAgrupadas[pred.partidoId] = [];
+            prediccionesAgrupadas[pred.partidoId].push(pred);
+        });
+
+        if (Object.keys(prediccionesAgrupadas).length === 0) {
+            html += `<p style="font-size:0.8rem; color:var(--text-muted);">Ningún partido ha comenzado aún. El secreto está a salvo.</p>`;
+        } else {
+            for (let pId in prediccionesAgrupadas) {
+                let p = db.partidosGrupos.find(x => x.id == pId);
+                let pName = p ? `${p.local} vs ${p.visitante}` : `Partido #${pId}`;
+                
+                html += `<div class="match-card" style="padding: 15px;">
+                            <div style="font-size: 0.8rem; color: var(--gold); font-weight: bold; margin-bottom: 10px;">${pName}</div>
+                            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px;">`;
+                
+                prediccionesAgrupadas[pId].forEach(pred => {
+                    html += `<div style="font-size:0.85rem; background:rgba(0,0,0,0.2); padding:5px 10px; border-radius:5px;">
+                                <strong>${pred.jugador}:</strong> ${pred.local} - ${pred.visitante}
+                             </div>`;
+                });
+                html += `</div></div>`;
+            }
+        }
+        contentDiv.innerHTML = html;
     }
 
     function renderReglas() { 

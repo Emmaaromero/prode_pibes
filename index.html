@@ -322,7 +322,7 @@
 
     // Fixture Oficial (72 Partidos)
     const db = {
-        grupos: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L'],
+        grupos: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', '16avos'],
         partidosGrupos: [
             {"id": 1, "grupo": "A", "local": "México", "flagL": "🇲🇽", "visitante": "Sudáfrica", "flagV": "🇿🇦", "fecha": "Jornada 1"}, {"id": 2, "grupo": "A", "local": "Corea del Sur", "flagL": "🇰🇷", "visitante": "Chequia", "flagV": "🇨🇿", "fecha": "Jornada 1"}, {"id": 3, "grupo": "A", "local": "México", "flagL": "🇲🇽", "visitante": "Corea del Sur", "flagV": "🇰🇷", "fecha": "Jornada 2"}, {"id": 4, "grupo": "A", "local": "Chequia", "flagL": "🇨🇿", "visitante": "Sudáfrica", "flagV": "🇿🇦", "fecha": "Jornada 2"}, {"id": 5, "grupo": "A", "local": "Chequia", "flagL": "🇨🇿", "visitante": "México", "flagV": "🇲🇽", "fecha": "Jornada 3"}, {"id": 6, "grupo": "A", "local": "Sudáfrica", "flagL": "🇿🇦", "visitante": "Corea del Sur", "flagV": "🇰🇷", "fecha": "Jornada 3"}, 
             {"id": 7, "grupo": "B", "local": "Canadá", "flagL": "🇨🇦", "visitante": "Bosnia y Herzegovina", "flagV": "🇧🇦", "fecha": "Jornada 1"}, {"id": 8, "grupo": "B", "local": "Qatar", "flagL": "🇶🇦", "visitante": "Suiza", "flagV": "🇨🇭", "fecha": "Jornada 1"}, {"id": 9, "grupo": "B", "local": "Canadá", "flagL": "🇨🇦", "visitante": "Qatar", "flagV": "🇶🇦", "fecha": "Jornada 2"}, {"id": 10, "grupo": "B", "local": "Suiza", "flagL": "🇨🇭", "visitante": "Bosnia y Herzegovina", "flagV": "🇧🇦", "fecha": "Jornada 2"}, {"id": 11, "grupo": "B", "local": "Suiza", "flagL": "🇨🇭", "visitante": "Canadá", "flagV": "🇨🇦", "fecha": "Jornada 3"}, {"id": 12, "grupo": "B", "local": "Bosnia y Herzegovina", "flagL": "🇧🇦", "visitante": "Qatar", "flagV": "🇶🇦", "fecha": "Jornada 3"}, 
@@ -335,8 +335,28 @@
             {"id": 49, "grupo": "I", "local": "Francia", "flagL": "🇫🇷", "visitante": "Senegal", "flagV": "🇸🇳", "fecha": "Jornada 1"}, {"id": 50, "grupo": "I", "local": "Irak", "flagL": "🇮🇶", "visitante": "Noruega", "flagV": "🇳🇴", "fecha": "Jornada 1"}, {"id": 51, "grupo": "I", "local": "Francia", "flagL": "🇫🇷", "visitante": "Irak", "flagV": "🇮🇶", "fecha": "Jornada 2"}, {"id": 52, "grupo": "I", "local": "Noruega", "flagL": "🇳🇴", "visitante": "Senegal", "flagV": "🇸🇳", "fecha": "Jornada 2"}, {"id": 53, "grupo": "I", "local": "Noruega", "flagL": "🇳🇴", "visitante": "Francia", "flagV": "🇫🇷", "fecha": "Jornada 3"}, {"id": 54, "grupo": "I", "local": "Senegal", "flagL": "🇸🇳", "visitante": "Irak", "flagV": "🇮🇶", "fecha": "Jornada 3"}, 
             {"id": 55, "grupo": "J", "local": "Argentina", "flagL": "🇦🇷", "visitante": "Argelia", "flagV": "🇩🇿", "fecha": "Jornada 1"}, {"id": 56, "grupo": "J", "local": "Austria", "flagL": "🇦🇹", "visitante": "Jordania", "flagV": "🇯🇴", "fecha": "Jornada 1"}, {"id": 57, "grupo": "J", "local": "Argentina", "flagL": "🇦🇷", "visitante": "Austria", "flagV": "🇦🇹", "fecha": "Jornada 2"}, {"id": 58, "grupo": "J", "local": "Jordania", "flagL": "🇯🇴", "visitante": "Argelia", "flagV": "🇩🇿", "fecha": "Jornada 2"}, {"id": 59, "grupo": "J", "local": "Jordania", "flagL": "🇯🇴", "visitante": "Argentina", "flagV": "🇦🇷", "fecha": "Jornada 3"}, {"id": 60, "grupo": "J", "local": "Argelia", "flagL": "🇩🇿", "visitante": "Austria", "flagV": "🇦🇹", "fecha": "Jornada 3"}, 
             {"id": 61, "grupo": "K", "local": "Portugal", "flagL": "🇵🇹", "visitante": "RD Congo", "flagV": "🇨🇩", "fecha": "Jornada 1"}, {"id": 62, "grupo": "K", "local": "Uzbekistán", "flagL": "🇺🇿", "visitante": "Colombia", "flagV": "🇨🇴", "fecha": "Jornada 1"}, {"id": 63, "grupo": "K", "local": "Portugal", "flagL": "🇵🇹", "visitante": "Uzbekistán", "flagV": "🇺🇿", "fecha": "Jornada 2"}, {"id": 64, "grupo": "K", "local": "Colombia", "flagL": "🇨🇴", "visitante": "RD Congo", "flagV": "🇨🇩", "fecha": "Jornada 2"}, {"id": 65, "grupo": "K", "local": "Colombia", "flagL": "🇨🇴", "visitante": "Portugal", "flagV": "🇵🇹", "fecha": "Jornada 3"}, {"id": 66, "grupo": "K", "local": "RD Congo", "flagL": "🇨🇩", "visitante": "Uzbekistán", "flagV": "🇺🇿", "fecha": "Jornada 3"}, 
-            {"id": 67, "grupo": "L", "local": "Inglaterra", "flagL": "🇬🇧", "visitante": "Croacia", "flagV": "🇭🇷", "fecha": "Jornada 1"}, {"id": 68, "grupo": "L", "local": "Ghana", "flagL": "🇬🇭", "visitante": "Panamá", "flagV": "🇵🇦", "fecha": "Jornada 1"}, {"id": 69, "grupo": "L", "local": "Inglaterra", "flagL": "🇬🇧", "visitante": "Ghana", "flagV": "🇬🇭", "fecha": "Jornada 2"}, {"id": 70, "grupo": "L", "local": "Panamá", "flagL": "🇵🇦", "visitante": "Croacia", "flagV": "🇭🇷", "fecha": "Jornada 2"}, {"id": 71, "grupo": "L", "local": "Panamá", "flagL": "🇵🇦", "visitante": "Inglaterra", "flagV": "🇬🇧", "fecha": "Jornada 3"}, {"id": 72, "grupo": "L", "local": "Croacia", "flagL": "🇭🇷", "visitante": "Ghana", "flagV": "🇬🇭", "fecha": "Jornada 3"}
+            {"id": 67, "grupo": "L", "local": "Inglaterra", "flagL": "🇬🇧", "visitante": "Croacia", "flagV": "🇭🇷", "fecha": "Jornada 1"}, {"id": 68, "grupo": "L", "local": "Ghana", "flagL": "🇬🇭", "visitante": "Panamá", "flagV": "🇵🇦", "fecha": "Jornada 1"}, {"id": 69, "grupo": "L", "local": "Inglaterra", "flagL": "🇬🇧", "visitante": "Ghana", "flagV": "🇬🇭", "fecha": "Jornada 2"}, {"id": 70, "grupo": "L", "local": "Panamá", "flagL": "🇵🇦", "visitante": "Croacia", "flagV": "🇭🇷", "fecha": "Jornada 2"},             {"id": 71, "grupo": "L", "local": "Panamá", "flagL": "🇵🇦", "visitante": "Inglaterra", "flagV": "🇬🇧", "fecha": "Jornada 3"}, 
+            {"id": 72, "grupo": "L", "local": "Croacia", "flagL": "🇭🇷", "visitante": "Ghana", "flagV": "🇬🇭", "fecha": "Jornada 3"}, // 👈 El último que tenías
+            
+            // 👇 NUEVOS PARTIDOS: 16AVOS DE FINAL
+            {"id": 73, "grupo": "16avos", "local": "Sudáfrica", "flagL": "🇿🇦", "visitante": "Canadá", "flagV": "🇨🇦", "fecha": "28-06 16:00 (Los Angeles)"},
+            {"id": 74, "grupo": "16avos", "local": "Alemania", "flagL": "🇩🇪", "visitante": "Paraguay", "flagV": "🇵🇾", "fecha": "29-06 17:30 (Boston)"},
+            {"id": 75, "grupo": "16avos", "local": "Países Bajos", "flagL": "🇳🇱", "visitante": "Marruecos", "flagV": "🇲🇦", "fecha": "29-06 22:00 (Monterrey)"},
+            {"id": 76, "grupo": "16avos", "local": "Brasil", "flagL": "🇧🇷", "visitante": "Japón", "flagV": "🇯🇵", "fecha": "29-06 14:00 (Houston)"},
+            {"id": 77, "grupo": "16avos", "local": "Francia", "flagL": "🇫🇷", "visitante": "Suecia", "flagV": "🇸🇪", "fecha": "30-06 18:00 (NY/NJ)"},
+            {"id": 78, "grupo": "16avos", "local": "Costa de Marfil", "flagL": "🇨🇮", "visitante": "Noruega", "flagV": "🇳🇴", "fecha": "30-06 14:00 (Dallas)"},
+            {"id": 79, "grupo": "16avos", "local": "México", "flagL": "🇲🇽", "visitante": "Ecuador", "flagV": "🇪🇨", "fecha": "30-06 22:00 (Azteca)"},
+            {"id": 80, "grupo": "16avos", "local": "Inglaterra", "flagL": "🇬🇧", "visitante": "RD Congo", "flagV": "🇨🇩", "fecha": "01-07 13:00 (Atlanta)"},
+            {"id": 81, "grupo": "16avos", "local": "Estados Unidos", "flagL": "🇺🇸", "visitante": "Bosnia y Herzegovina", "flagV": "🇧🇦", "fecha": "01-07 21:00 (San Francisco)"},
+            {"id": 82, "grupo": "16avos", "local": "Bélgica", "flagL": "🇧🇪", "visitante": "Senegal", "flagV": "🇸🇳", "fecha": "01-07 17:00 (Seattle)"},
+            {"id": 83, "grupo": "16avos", "local": "Portugal", "flagL": "🇵🇹", "visitante": "Croacia", "flagV": "🇭🇷", "fecha": "02-07 20:00 (Toronto)"},
+            {"id": 84, "grupo": "16avos", "local": "España", "flagL": "🇪🇸", "visitante": "Austria", "flagV": "🇦🇹", "fecha": "02-07 16:00 (Los Angeles)"},
+            {"id": 85, "grupo": "16avos", "local": "Suiza", "flagL": "🇨🇭", "visitante": "Argelia", "flagV": "🇩🇿", "fecha": "02-07 00:00 (Vancouver)"},
+            {"id": 86, "grupo": "16avos", "local": "Argentina", "flagL": "🇦🇷", "visitante": "Cabo Verde", "flagV": "🇨🇻", "fecha": "03-07 19:00 (Miami)"},
+            {"id": 87, "grupo": "16avos", "local": "Colombia", "flagL": "🇨🇴", "visitante": "Ghana", "flagV": "🇬🇭", "fecha": "03-07 22:30 (Kansas City)"},
+            {"id": 88, "grupo": "16avos", "local": "Australia", "flagL": "🇦🇺", "visitante": "Egipto", "flagV": "🇪🇬", "fecha": "03-07 16:00 (Estadio)"}
         ],
+
         prediccionesUsuario: JSON.parse(localStorage.getItem('prode_datos')) || {}
     };
 
@@ -576,8 +596,14 @@
         document.getElementById('btn-walicho').style.display = (tab === 'grupos') ? 'flex' : 'none';
     }
 
-    function renderFaseGrupos(grupoFiltro = 'A') {
-        let html = `<div class="filter-group"><select id="groupSelect" onchange="renderFaseGrupos(this.value)">${db.grupos.map(g => `<option value="${g}" ${g === grupoFiltro ? 'selected' : ''}>Filtrar: Grupo ${g}</option>`).join('')}</select></div><div id="matches-container">`;
+        function renderFaseGrupos(grupoFiltro = 'A') {
+        // Genera las opciones del select acomodando estéticamente el texto de 16avos
+        let opcionesSelect = db.grupos.map(g => {
+            let texto = (g === '16avos') ? '16avos de Final 🏆' : `Grupo ${g}`;
+            return `<option value="${g}" ${g === grupoFiltro ? 'selected' : ''}>Filtrar: ${texto}</option>`;
+        }).join('');
+
+        let html = `<div class="filter-group"><select id="groupSelect" onchange="renderFaseGrupos(this.value)">${opcionesSelect}</select></div><div id="matches-container">`;
         const partidos = db.partidosGrupos.filter(p => p.grupo === grupoFiltro);
         
         partidos.forEach(p => {
@@ -590,7 +616,7 @@
 
             html += `
             <div class="match-card">
-                <div class="match-header"><span>${p.fecha} • Grupo ${p.grupo}</span><span>⚽ Partido #${p.id}</span></div>
+                <div class="match-header"><span>${p.fecha}</span><span>⚽ Partido #${p.id}</span></div>
                 <div class="match-body">
                     <div class="team local"><span class="flag">${p.flagL}</span><span>${p.local}</span></div>
                     <div class="score-container">
@@ -623,6 +649,7 @@
 
         html += `<button class="btn-primary" onclick="submitPredicciones()">Guardar Pronósticos</button></div>`;
         contentDiv.innerHTML = html;
+    }
     }
 
     function renderPosiciones() {

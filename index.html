@@ -676,6 +676,7 @@
     }
 
     function renderAuditoria() {
+        function renderAuditoria() {
         if (!datosGlobalesServer.predicciones) {
             contentDiv.innerHTML = `<div style="text-align:center; padding:40px; color:var(--text-muted);"><p>Aún no hay datos públicos disponibles.</p></div>`;
             return;
@@ -683,6 +684,7 @@
 
         let html = `<h3 style="color:var(--accent); margin-bottom:15px; text-transform: uppercase;">👁️ Gran Hermano</h3>`;
         
+        // Bloque de Walichos y Dados
         html += `<div class="match-card" style="margin-bottom: 20px;">
                     <h4 style="color:var(--walicho); margin-bottom:10px;">📜 Registro de Habilidades</h4>`;
         
@@ -706,8 +708,55 @@
         }
         html += `</div>`;
 
+        // Bloque de Predicciones Públicas
         html += `<h4 style="color:var(--text-main); margin-bottom:10px;">📊 Pronósticos (Partidos Iniciados)</h4>`;
         
+        let prediccionesAgrupadas = {};
+        datosGlobalesServer.predicciones.forEach(pred => {
+            if (!prediccionesAgrupadas[pred.partidoId]) prediccionesAgrupadas[pred.partidoId] = [];
+            prediccionesAgrupadas[pred.partidoId].push(pred);
+        });
+
+        if (Object.keys(prediccionesAgrupadas).length === 0) {
+            html += `<p style="font-size:0.8rem; color:var(--text-muted);">Ningún partido ha comenzado aún. El secreto está a salvo.</p>`;
+        } else {
+            // 👇 NUEVA LÓGICA: Ordenar los IDs de los partidos poniendo los de 16avos primero
+            let partidoIdsOrdenados = Object.keys(prediccionesAgrupadas).sort((a, b) => {
+                let partidoA = db.partidosGrupos.find(x => x.id == a);
+                let partidoB = db.partidosGrupos.find(x => x.id == b);
+                
+                let es16avosA = partidoA && partidoA.grupo === '16avos';
+                let es16avosB = partidoB && partidoB.grupo === '16avos';
+
+                if (es16avosA && !es16avosB) return -1; // A va primero si es 16avos
+                if (!es16avosA && es16avosB) return 1;  // B va primero si es 16avos
+                return a - b; // Si ambos son del mismo tipo, mantiene el orden numérico de ID
+            });
+
+            partidoIdsOrdenados.forEach(pId => {
+                let p = db.partidosGrupos.find(x => x.id == pId);
+                let pName = p ? `${p.local} vs ${p.visitante}` : `Partido #${pId}`;
+                
+                // Si es un partido de 16avos, le metemos un sutil borde dorado estético para destacarlo
+                let esFaseEliminatoria = p && p.grupo === '16avos';
+                let estiloCard = esFaseEliminatoria ? 'padding: 15px; border-color: var(--gold); background: linear-gradient(145deg, var(--bg-card), rgba(234, 179, 8, 0.02));' : 'padding: 15px;';
+                let tagFase = esFaseEliminatoria ? ' <span style="color: var(--gold); font-size:0.7rem;">[16AVOS]</span>' : '';
+
+                html += `<div class="match-card" style="${estiloCard}">
+                            <div style="font-size: 0.8rem; color: var(--gold); font-weight: bold; margin-bottom: 10px;">${pName}${tagFase}</div>
+                            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px;">`;
+                
+                prediccionesAgrupadas[pId].forEach(pred => {
+                    html += `<div style="font-size:0.85rem; background:rgba(0,0,0,0.2); padding:5px 10px; border-radius:5px;">
+                                <strong>${pred.jugador}:</strong> ${pred.local} - ${pred.visitante}
+                             </div>`;
+                });
+                html += `</div></div>`;
+            });
+        }
+        contentDiv.innerHTML = html;
+    }
+
         let prediccionesAgrupadas = {};
         datosGlobalesServer.predicciones.forEach(pred => {
             if (!prediccionesAgrupadas[pred.partidoId]) prediccionesAgrupadas[pred.partidoId] = [];

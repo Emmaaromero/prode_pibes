@@ -311,20 +311,20 @@
     let misWalichosSufridos = [];
     let datosGlobalesServer = {};
 
-    // Fixture Oficial (88 Partidos Totales)
+    // Fixture Oficial (88 Partidos Totales con Octavos de Final Reales)
     const db = {
-        grupos: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', '16avos'],
+        grupos: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', '16avos', '8avos'],
         partidosGrupos: [
             {"id": 1, "grupo": "A", "local": "México", "flagL": "🇲🇽", "visitante": "Sudáfrica", "flagV": "🇿🇦", "fecha": "Jornada 1"}, {"id": 2, "grupo": "A", "local": "Corea del Sur", "flagL": "🇰🇷", "visitante": "Chequia", "flagV": "🇨🇿", "fecha": "Jornada 1"}, {"id": 3, "grupo": "A", "local": "México", "flagL": "🇲🇽", "visitante": "Corea del Sur", "flagV": "🇰🇷", "fecha": "Jornada 2"}, {"id": 4, "grupo": "A", "local": "Chequia", "flagL": "🇨🇿", "visitante": "Sudáfrica", "flagV": "🇿🇦", "fecha": "Jornada 2"}, {"id": 5, "grupo": "A", "local": "Chequia", "flagL": "🇨🇿", "visitante": "México", "flagV": "🇲🇽", "fecha": "Jornada 3"}, {"id": 6, "grupo": "A", "local": "Sudáfrica", "flagL": "🇿🇦", "visitante": "Corea del Sur", "flagV": "🇰🇷", "fecha": "Jornada 3"}, 
             {"id": 7, "grupo": "B", "local": "Canadá", "flagL": "🇨🇦", "visitante": "Bosnia y Herzegovina", "flagV": "🇧🇦", "fecha": "Jornada 1"}, {"id": 8, "grupo": "B", "local": "Qatar", "flagL": "🇶🇦", "visitante": "Suiza", "flagV": "🇨🇭", "fecha": "Jornada 1"}, {"id": 9, "grupo": "B", "local": "Canadá", "flagL": "🇨🇦", "visitante": "Qatar", "flagV": "🇶🇦", "fecha": "Jornada 2"}, {"id": 10, "grupo": "B", "local": "Suiza", "flagL": "🇨🇭", "visitante": "Bosnia y Herzegovina", "flagV": "🇧🇦", "fecha": "Jornada 2"}, {"id": 11, "grupo": "B", "local": "Suiza", "flagL": "🇨🇭", "visitante": "Canadá", "flagV": "🇨🇦", "fecha": "Jornada 3"}, {"id": 12, "grupo": "B", "local": "Bosnia y Herzegovina", "flagL": "🇧🇦", "visitante": "Qatar", "flagV": "🇶🇦", "fecha": "Jornada 3"}, 
             {"id": 13, "grupo": "C", "local": "Brasil", "flagL": "🇧🇷", "visitante": "Marruecos", "flagV": "🇲🇦", "fecha": "Jornada 1"}, {"id": 14, "grupo": "C", "local": "Haití", "flagL": "🇭🇹", "visitante": "Escocia", "flagV": "🏴󠁧󠁢󠁳󠁣󠁴󠁿", "fecha": "Jornada 1"}, {"id": 15, "grupo": "C", "local": "Brasil", "flagL": "🇧🇷", "visitante": "Haití", "flagV": "🇭🇹", "fecha": "Jornada 2"}, {"id": 16, "grupo": "C", "local": "Escocia", "flagL": "🏴󠁧󠁢󠁳󠁣󠁴󠁿", "visitante": "Marruecos", "flagV": "🇲🇦", "fecha": "Jornada 2"}, {"id": 17, "grupo": "C", "local": "Escocia", "flagL": "🏴󠁧󠁢󠁳󠁣󠁴󠁿", "visitante": "Brasil", "flagV": "🇧🇷", "fecha": "Jornada 3"}, {"id": 18, "grupo": "C", "local": "Marruecos", "flagL": "🇲🇦", "visitante": "Haití", "flagV": "🇭🇹", "fecha": "Jornada 3"}, 
             {"id": 19, "grupo": "D", "local": "Estados Unidos", "flagL": "🇺🇸", "visitante": "Paraguay", "flagV": "🇵🇾", "fecha": "Jornada 1"}, {"id": 20, "grupo": "D", "local": "Australia", "flagL": "🇦🇺", "visitante": "Turquía", "flagV": "🇹🇷", "fecha": "Jornada 1"}, {"id": 21, "grupo": "D", "local": "Estados Unidos", "flagL": "🇺🇸", "visitante": "Australia", "flagV": "🇦🇺", "fecha": "Jornada 2"}, {"id": 22, "grupo": "D", "local": "Turquía", "flagL": "🇹🇷", "visitante": "Paraguay", "flagV": "🇵🇾", "fecha": "Jornada 2"}, {"id": 23, "grupo": "D", "local": "Turquía", "flagL": "🇹🇷", "visitante": "Estados Unidos", "flagV": "🇺🇸", "fecha": "Jornada 3"}, {"id": 24, "grupo": "D", "local": "Paraguay", "flagL": "🇵🇾", "visitante": "Australia", "flagV": "🇦🇺", "fecha": "Jornada 3"}, 
-            {"id": 25, "grupo": "E", "local": "Alemania", "flagL": "🇩🇪", "visitante": "Curazao", "flagV": "🇨🇼", "fecha": "Jornada 1"}, {"id": 26, "grupo": "E", "local": "Costa de Marfil", "flagL": "🇨🇮", "visitante": "Ecuador", "flagV": "🇪🇨", "fecha": "Jornada 1"}, {"id": 27, "grupo": "E", "local": "Alemania", "flagL": "🇩🇪", "visitante": "Costa de Marfil", "flagV": "🇨🇮", "fecha": "Jornada 2"}, {"id": 28, "grupo": "E", "local": "Ecuador", "flagL": "🇪🇨", "visitante": "Curazao", "flagV": "🇨🇼", "fecha": "Jornada 2"}, {"id": 29, "grupo": "E", "local": "Ecuador", "flagL": "🇪🇨", "visitante": "Alemania", "flagV": "🇩🇪", "fecha": "Jornada 3"}, {"id": 30, "grupo": "E", "local": "Curazao", "flagL": "🇨🇼", "visitante": "Costa de Marfil", "flagV": "🇨🇮", "fecha": "Jornada 3"}, 
+            {"id": 25, "grupo": "E", "local": "Alemania", "flagL": "🇩🇪", "visitante": "Curazao", "flagV": "🇨🇼", "fecha": "Jornada 1"}, {"id": 26, "grupo": "E", "local": "Costa de Marfil", "flagL": "🇨🇮", "visitante": "Ecuador", "flagV": "🇪🇨", "fecha": "Jornada 1"}, {"id": 27, "grupo": "E", "local": "Alemania", "flagL": "🇩🇪", "visitante": "Costa de Marfil", "flagV": "🇨🇮", "fecha": "Jornada 2"}, {"id": 28, "grupo": "E", "local": "Ecuador", "flagL": "🇪🇨", "visitante": "Curazao", "flagV": "🇨🇼", "fecha": "Jornada 2"}, {"id": 29, "grupo": "E", "local": "Ecuador", "flagL": "🇪🇨", "visitante": "Alemania", "flagL": "🇩🇪", "fecha": "Jornada 3"}, {"id": 30, "grupo": "E", "local": "Curazao", "flagL": "🇨🇼", "visitante": "Costa de Marfil", "flagV": "🇨🇮", "fecha": "Jornada 3"}, 
             {"id": 31, "grupo": "F", "local": "Países Bajos", "flagL": "🇳🇱", "visitante": "Japón", "flagV": "🇯🇵", "fecha": "Jornada 1"}, {"id": 32, "grupo": "F", "local": "Suecia", "flagL": "🇸🇪", "visitante": "Túnez", "flagV": "🇹🇳", "fecha": "Jornada 1"}, {"id": 33, "grupo": "F", "local": "Países Bajos", "flagL": "🇳🇱", "visitante": "Suecia", "flagV": "🇸🇪", "fecha": "Jornada 2"}, {"id": 34, "grupo": "F", "local": "Túnez", "flagL": "🇹🇳", "visitante": "Japón", "flagV": "🇯🇵", "fecha": "Jornada 2"}, {"id": 35, "grupo": "F", "local": "Túnez", "flagL": "🇹🇳", "visitante": "Países Bajos", "flagV": "🇳🇱", "fecha": "Jornada 3"}, {"id": 36, "grupo": "F", "local": "Japón", "flagL": "🇯🇵", "visitante": "Suecia", "flagV": "🇸🇪", "fecha": "Jornada 3"}, 
             {"id": 37, "grupo": "G", "local": "Bélgica", "flagL": "🇧🇪", "visitante": "Egipto", "flagV": "🇪🇬", "fecha": "Jornada 1"}, {"id": 38, "grupo": "G", "local": "Irán", "flagL": "🇮🇷", "visitante": "Nueva Zelanda", "flagV": "🇳🇿", "fecha": "Jornada 1"}, {"id": 39, "grupo": "G", "local": "Bélgica", "flagL": "🇧🇪", "visitante": "Irán", "flagV": "🇮🇷", "fecha": "Jornada 2"}, {"id": 40, "grupo": "G", "local": "Nueva Zelanda", "flagL": "🇳🇿", "visitante": "Egipto", "flagV": "🇪🇬", "fecha": "Jornada 2"}, {"id": 41, "grupo": "G", "local": "Nueva Zelanda", "flagL": "🇳🇿", "visitante": "Bélgica", "flagV": "🇧🇪", "fecha": "Jornada 3"}, {"id": 42, "grupo": "G", "local": "Egipto", "flagL": "🇪🇬", "visitante": "Irán", "flagV": "🇮🇷", "fecha": "Jornada 3"}, 
             {"id": 43, "grupo": "H", "local": "España", "flagL": "🇪🇸", "visitante": "Cabo Verde", "flagV": "🇨🇻", "fecha": "Jornada 1"}, {"id": 44, "grupo": "H", "local": "Arabia Saudita", "flagL": "🇸🇦", "visitante": "Uruguay", "flagV": "🇺🇾", "fecha": "Jornada 1"}, {"id": 45, "grupo": "H", "local": "España", "flagL": "🇪🇸", "visitante": "Arabia Saudita", "flagV": "🇸🇦", "fecha": "Jornada 2"}, {"id": 46, "grupo": "H", "local": "Uruguay", "flagL": "🇺🇾", "visitante": "Cabo Verde", "flagV": "🇨🇻", "fecha": "Jornada 2"}, {"id": 47, "grupo": "H", "local": "Uruguay", "flagL": "🇺🇾", "visitante": "España", "flagV": "🇪🇸", "fecha": "Jornada 3"}, {"id": 48, "grupo": "H", "local": "Cabo Verde", "flagL": "🇨🇻", "visitante": "Arabia Saudita", "flagV": "🇸🇦", "fecha": "Jornada 3"}, 
             {"id": 49, "grupo": "I", "local": "Francia", "flagL": "🇫🇷", "visitante": "Senegal", "flagV": "🇸🇳", "fecha": "Jornada 1"}, {"id": 50, "grupo": "I", "local": "Irak", "flagL": "🇮🇶", "visitante": "Noruega", "flagV": "🇳🇴", "fecha": "Jornada 1"}, {"id": 51, "grupo": "I", "local": "Francia", "flagL": "🇫🇷", "visitante": "Irak", "flagV": "🇮🇶", "fecha": "Jornada 2"}, {"id": 52, "grupo": "I", "local": "Noruega", "flagL": "🇳🇴", "visitante": "Senegal", "flagV": "🇸🇳", "fecha": "Jornada 2"}, {"id": 53, "grupo": "I", "local": "Noruega", "flagL": "🇳🇴", "visitante": "Francia", "flagV": "🇫🇷", "fecha": "Jornada 3"}, {"id": 54, "grupo": "I", "local": "Senegal", "flagL": "🇸🇳", "visitante": "Irak", "flagV": "🇮🇶", "fecha": "Jornada 3"}, 
-            {"id": 55, "grupo": "J", "local": "Argentina", "flagL": "🇦🇷", "visitante": "Argelia", "flagV": "🇩🇿", "fecha": "Jornada 1"}, {"id": 56, "grupo": "J", "local": "Austria", "flagL": "🇦🇹", "visitante": "Jordania", "flagV": "🇯🇴", "fecha": "Jornada 1"}, {"id": 57, "grupo": "J", "local": "Argentina", "flagL": "🇦🇷", "visitante": "Austria", "flagV": "🇦🇹", "fecha": "Jornada 2"}, {"id": 58, "grupo": "J", "local": "Jordania", "flagL": "🇯🇴", "visitante": "Argelia", "flagV": "🇩🇿", "fecha": "Jordania 2"}, {"id": 59, "grupo": "J", "local": "Jordania", "flagL": "🇯🇴", "visitante": "Argentina", "flagV": "🇦🇷", "fecha": "Jornada 3"}, {"id": 60, "grupo": "J", "local": "Argelia", "flagL": "🇩🇿", "visitante": "Austria", "flagV": "🇦🇹", "fecha": "Jornada 3"}, 
+            {"id": 55, "grupo": "J", "local": "Argentina", "flagL": "🇦🇷", "visitante": "Argelia", "flagV": "🇩🇿", "fecha": "Jornada 1"}, {"id": 56, "grupo": "J", "local": "Austria", "flagL": "🇦🇹", "visitante": "Jordania", "flagV": "🇯🇴", "fecha": "Jornada 1"}, {"id": 57, "grupo": "J", "local": "Argentina", "flagL": "🇦🇷", "visitante": "Austria", "flagV": "🇦🇹", "fecha": "Jornada 2"}, {"id": 58, "grupo": "J", "local": "Jordania", "flagL": "🇯🇴", "visitante": "Argelia", "flagV": "🇩🇿", "fecha": "Jornada 2"}, {"id": 59, "grupo": "J", "local": "Jordania", "flagL": "🇯🇴", "visitante": "Argentina", "flagV": "🇦🇷", "fecha": "Jornada 3"}, {"id": 60, "grupo": "J", "local": "Argelia", "flagL": "🇩🇿", "visitante": "Austria", "flagV": "🇦🇹", "fecha": "Jornada 3"}, 
             {"id": 61, "grupo": "K", "local": "Portugal", "flagL": "🇵🇹", "visitante": "RD Congo", "flagV": "🇨🇩", "fecha": "Jornada 1"}, {"id": 62, "grupo": "K", "local": "Uzbekistán", "flagL": "🇺🇿", "visitante": "Colombia", "flagV": "🇨🇴", "fecha": "Jornada 1"}, {"id": 63, "grupo": "K", "local": "Portugal", "flagL": "🇵🇹", "visitante": "Uzbekistán", "flagV": "🇺🇿", "fecha": "Jornada 2"}, {"id": 64, "grupo": "K", "local": "Colombia", "flagL": "🇨🇴", "visitante": "RD Congo", "flagV": "🇨🇩", "fecha": "Jornada 2"}, {"id": 65, "grupo": "K", "local": "Colombia", "flagL": "🇨🇴", "visitante": "Portugal", "flagV": "🇵🇹", "fecha": "Jornada 3"}, {"id": 66, "grupo": "K", "local": "RD Congo", "flagL": "🇨🇩", "visitante": "Uzbekistán", "flagV": "🇺🇿", "fecha": "Jornada 3"}, 
             {"id": 67, "grupo": "L", "local": "Inglaterra", "flagL": "🇬🇧", "visitante": "Croacia", "flagV": "🇭🇷", "fecha": "Jornada 1"}, {"id": 68, "grupo": "L", "local": "Ghana", "flagL": "🇬🇭", "visitante": "Panamá", "flagV": "🇵🇦", "fecha": "Jornada 1"}, {"id": 69, "grupo": "L", "local": "Inglaterra", "flagL": "🇬🇧", "visitante": "Ghana", "flagV": "🇬🇭", "fecha": "Jornada 2"}, {"id": 70, "grupo": "L", "local": "Panamá", "flagL": "🇵🇦", "visitante": "Croacia", "flagV": "🇭🇷", "fecha": "Jornada 2"}, {"id": 71, "grupo": "L", "local": "Panamá", "flagL": "🇵🇦", "visitante": "Inglaterra", "flagV": "🇬🇧", "fecha": "Jornada 3"}, 
             {"id": 72, "grupo": "L", "local": "Croacia", "flagL": "🇭🇷", "visitante": "Ghana", "flagV": "🇬🇭", "fecha": "Jornada 3"}, 
@@ -343,12 +343,23 @@
             {"id": 83, "grupo": "16avos", "local": "Portugal", "flagL": "🇵🇹", "visitante": "Croacia", "flagV": "🇭🇷", "fecha": "02-07 20:00 (Toronto)"},
             {"id": 84, "grupo": "16avos", "local": "España", "flagL": "🇪🇸", "visitante": "Austria", "flagV": "🇦🇹", "fecha": "02-07 16:00 (Los Angeles)"},
             {"id": 85, "grupo": "16avos", "local": "Suiza", "flagL": "🇨🇭", "visitante": "Argelia", "flagV": "🇩🇿", "fecha": "02-07 00:00 (Vancouver)"},
-            {"id": 86, "grupo": "16avos", "local": "Argentina", "flagL": "🇦🇷", "visitante": "Cabo Verde", "flagV": "🇨🇻", "fecha": "03-07 19:00 (Miami)"},
+            {"id": 86, "grupo": "16avos", "local": "Argentina", "flagL": "🇦🇷", "visitante": "Cabo Verde", "flagV": "🇨🇻", "fecha": "03-07 Miami (Stadium)"},
             {"id": 87, "grupo": "16avos", "local": "Colombia", "flagL": "🇨🇴", "visitante": "Ghana", "flagV": "🇬🇭", "fecha": "03-07 22:30 (Kansas City)"},
-            {"id": 88, "grupo": "16avos", "local": "Australia", "flagL": "🇦🇺", "visitante": "Egipto", "flagV": "🇪🇬", "fecha": "03-07 16:00 (Estadio)"}
+            {"id": 88, "grupo": "16avos", "local": "Australia", "flagL": "🇦🇺", "visitante": "Egipto", "flagV": "🇪🇬", "fecha": "03-07 16:00 (Estadio)"},
+
+            // 👇 NUEVOS PARTIDOS REALES: OCTAVOS DE FINAL (8AVOS)
+            {"id": 89, "grupo": "8avos", "local": "Canadá", "flagL": "🇨🇦", "visitante": "Marruecos", "flagV": "🇲🇦", "fecha": "Octavos de Final"},
+            {"id": 90, "grupo": "8avos", "local": "Paraguay", "flagL": "🇵🇾", "visitante": "Francia", "flagV": "🇫🇷", "fecha": "Octavos de Final"},
+            {"id": 91, "grupo": "8avos", "local": "Brasil", "flagL": "🇧🇷", "visitante": "Noruega", "flagV": "🇳🇴", "fecha": "Octavos de Final"},
+            {"id": 92, "grupo": "8avos", "local": "México", "flagL": "🇲🇽", "visitante": "Inglaterra", "flagV": "🇬🇧", "fecha": "Octavos de Final"},
+            {"id": 93, "grupo": "8avos", "local": "Portugal", "flagL": "🇵🇹", "visitante": "España", "flagV": "🇪🇸", "fecha": "Octavos de Final"},
+            {"id": 94, "grupo": "8avos", "local": "Estados Unidos", "flagL": "🇺🇸", "visitante": "Bélgica", "flagV": "🇧🇪", "fecha": "Octavos de Final"},
+            {"id": 95, "grupo": "8avos", "local": "Argentina", "flagL": "🇦🇷", "visitante": "Egipto", "flagV": "🇪🇬", "fecha": "Octavos de Final"},
+            {"id": 96, "grupo": "8avos", "local": "Suiza", "flagL": "🇨🇭", "visitante": "Colombia", "flagV": "🇨🇴", "fecha": "Octavos de Final"}
         ],
         prediccionesUsuario: JSON.parse(localStorage.getItem('prode_datos')) || {}
     };
+
 
     // ==========================================
     // 2. DIRECTOR DE AUDIO (BGM, THEMES Y SFX)
@@ -478,6 +489,7 @@
         }
     }
 
+
     // ==========================================
     // 3. LOBBY Y LOGIN (UI INIT)
     // ==========================================
@@ -568,6 +580,7 @@
             .catch(() => renderFaseGrupos());
     }
 
+
     // ==========================================
     // 4. RENDERIZADO PRINCIPAL (TABS)
     // ==========================================
@@ -585,7 +598,10 @@
 
     function renderFaseGrupos(grupoFiltro = 'A') {
         let opcionesSelect = db.grupos.map(g => {
-            let texto = (g === '16avos') ? '16avos de Final 🏆' : `Grupo ${g}`;
+            let texto = g;
+            if (g === '16avos') texto = '16avos de Final 🏆';
+            else if (g === '8avos') texto = '8avos de Final 🔥';
+            else texto = `Grupo ${g}`;
             return `<option value="${g}" ${g === grupoFiltro ? 'selected' : ''}>Filtrar: ${texto}</option>`;
         }).join('');
 
@@ -600,9 +616,12 @@
             let disableInput = (trampaActiva && trampaActiva.tipo === 'bloqueo') ? 'disabled' : '';
             let lockStyle = disableInput ? 'background-color: #334155; cursor: not-allowed;' : '';
 
+            let esEliminatoria = (p.grupo === '16avos' || p.grupo === '8avos');
+            let colorId = esEliminatoria ? 'var(--gold)' : 'var(--text-muted)';
+
             html += `
             <div class="match-card">
-                <div class="match-header"><span>${p.fecha}</span><span>⚽ Partido #${p.id}</span></div>
+                <div class="match-header"><span>${p.fecha}</span><span style="color: ${colorId}">⚽ Partido #${p.id}</span></div>
                 <div class="match-body">
                     <div class="team local"><span class="flag">${p.flagL}</span><span>${p.local}</span></div>
                     <div class="score-container">
@@ -707,28 +726,42 @@
         }
         html += `</div>`;
 
-        html += `<h4 style="color:var(--text-main); margin-bottom:10px;">📊 Pronósticos (16avos de Final)</h4>`;
+        html += `<h4 style="color:var(--text-main); margin-bottom:10px;">📊 Pronósticos (16avos y 8avos de Final)</h4>`;
         
         let prediccionesAgrupadas = {};
         datosGlobalesServer.predicciones.forEach(pred => {
             let p = db.partidosGrupos.find(x => x.id == pred.partidoId);
-            if (p && p.grupo === '16avos') {
+            if (p && (p.grupo === '16avos' || p.grupo === '8avos')) {
                 if (!prediccionesAgrupadas[pred.partidoId]) prediccionesAgrupadas[pred.partidoId] = [];
                 prediccionesAgrupadas[pred.partidoId].push(pred);
             }
         });
 
-        let partidoIdsOrdenados = Object.keys(prediccionesAgrupadas).sort((a, b) => a - b);
+        let partidoIdsOrdenados = Object.keys(prediccionesAgrupadas).sort((a, b) => {
+            let partidoA = db.partidosGrupos.find(x => x.id == a);
+            let partidoB = db.partidosGrupos.find(x => x.id == b);
+            
+            let es8avosA = partidoA && partidoA.grupo === '8avos';
+            let es8avosB = partidoB && partidoB.grupo === '8avos';
+
+            if (es8avosA && !es8avosB) return -1;
+            if (!es8avosA && es8avosB) return 1;
+            return a - b;
+        });
 
         if (partidoIdsOrdenados.length === 0) {
-            html += `<p style="font-size:0.8rem; color:var(--text-muted);">Ningún partido de 16avos ha comenzado aún. El secreto está a salvo.</p>`;
+            html += `<p style="font-size:0.8rem; color:var(--text-muted);">Ningún partido de las fases finales ha comenzado aún.</p>`;
         } else {
             partidoIdsOrdenados.forEach(pId => {
                 let p = db.partidosGrupos.find(x => x.id == pId);
                 let pName = p ? `${p.local} vs ${p.visitante}` : `Partido #${pId}`;
                 
-                html += `<div class="match-card" style="padding: 15px; border-color: var(--gold); background: linear-gradient(145deg, var(--bg-card), rgba(234, 179, 8, 0.02));">
-                            <div style="font-size: 0.8rem; color: var(--gold); font-weight: bold; margin-bottom: 10px;">${pName} <span style="color: var(--gold); font-size:0.7rem;">[16AVOS]</span></div>
+                let es8avos = p && p.grupo === '8avos';
+                let estiloCard = es8avos ? 'padding: 15px; border-color: #ef4444; background: linear-gradient(145deg, var(--bg-card), rgba(239, 68, 68, 0.02));' : 'padding: 15px; border-color: var(--gold); background: linear-gradient(145deg, var(--bg-card), rgba(234, 179, 8, 0.02));';
+                let tagFase = es8avos ? ' <span style="color: #ef4444; font-size:0.7rem;">[8AVOS]</span>' : ' <span style="color: var(--gold); font-size:0.7rem;">[16AVOS]</span>';
+
+                html += `<div class="match-card" style="${estiloCard}">
+                            <div style="font-size: 0.8rem; color: var(--gold); font-weight: bold; margin-bottom: 10px;">${pName}${tagFase}</div>
                             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px;">`;
                 
                 prediccionesAgrupadas[pId].forEach(pred => {
@@ -755,7 +788,7 @@
             </ul>
             <h3 style="color:var(--purple); margin-bottom:15px; margin-top:30px;">Habilidades (Gamificación)</h3>
             <ul class="rules-list">
-                <li><strong>6. Comprar Dados 🎲 (Activa):</strong> Destraba la edición de un partido que ya empezó (válido hasta el minuto 20 del ST, o sea, 95 min desde el horario oficial de inicio). Uso: 1 vez cada 5 días.</li>
+                <li><strong>6. Comprar Dados 🎲 (Activa):</strong> Destraba la edición de un partido que ya empezó (válido hasta el minuto 20 del ST, o sea, 95 min desde el horario oficial de inicio). Uso: 1 vez cada 5 days.</li>
                 <li><strong>7. El Underdog (Pasiva):</strong> Si vas último en la tabla general, tus aciertos valen DOBLE (x2). ⚠️ <em>Requisito vital:</em> No se premia el abandono. Para que el multiplicador te haga efecto, el sistema verifica que tengas cargados y completos tus pronósticos de los últimos 2 días de competencia.</li>
                 <li><strong>8. VAR y Walichos 📺🍄:</strong> Tenés 3 usos de VAR en todo el torneo para espiar a otros. Además, <strong>una vez cada 3 días</strong> podés tirarle un Walicho (maldición) a un rival para arruinarle la fecha (Forzar Pares, Impares, Multiplicar x2, o bloquearle la celda con Candado).</li>
             </ul>
@@ -766,9 +799,6 @@
             <p style="margin-bottom:10px; color:var(--text-muted);">Simulá que te cayó una trampa o cambiá la hora para probar los secretos.</p>
             <button class="dev-btn" onclick="simularWalicho('pares')">Walicho: Pares</button>
             <button class="dev-btn" onclick="simularWalicho('impares')">Walicho: Impares</button>
-            <button class="dev-btn" onclick="simularWalicho('x2')">Walicho: x2</button>
-            <button class="dev-btn" onclick="simularWalicho(null)">Limpiar Walicho</button>
-            <hr style="border-color:#555; margin:10px 0;">
             <button class="dev-btn" onclick="simularMadrugada()">Simular Reloj 3:00 AM</button>
         </div>`; 
         
@@ -948,4 +978,3 @@
 </script>
 </body>
 </html>
-
